@@ -1,0 +1,40 @@
+# Ansible playbook to setup buildbot instance
+# http://scons.org/wiki/InstallingBuildbotSlaves
+#
+#   ansible-playbook -i buildbot.hosts buildbot.yml -e 'botuser=scons'
+#
+# Tested with Ansible 1.5.0. Send questions to:
+#
+#   anatoly techtonik <techtonik@gmail.com>
+#
+---
+# host is overridable with --extra-vars 'host=address'
+- hosts: "{{ host | default('localhost') }}"
+  vars:
+    # botuser can be overridden with -e 'botuser=scons2'
+    - botuser: scons
+    - hgrc: /home/{{ botuser }}/.hgrc
+    - venv: /home/{{ botuser }}/buildbot-virtualenv
+
+  tasks:
+  # --- install requirements ---
+  - name: ubuntu/debian - make sure mercurial is installed
+    apt: pkg={{ item }}
+    with_items:
+      - mercurial
+      - python-virtualenv
+
+  # --- enable mercurial purge extension ---
+  - name: create .hgrc if necessary
+    stat: path={{ hgrc }}
+    register: st
+  - file: path={{ hgrc }} owner={{ botuser }} state=touch
+    when: not st.stat.exists
+  - name: enable mercurial purge extension
+    ini_file: dest={{ hgrc }} backup=yes
+              section=extensions option=hgext.purge
+              value=
+
+  # --- install buildbot ---
+  - name: install buildbot-slave in virtualenv
+    pip: name=buildbot-slave virtualenv={{ venv }} 

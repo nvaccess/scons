@@ -1,0 +1,152 @@
+<html>
+<head>
+</head>
+<body>
+
+<p>SCons is a next-generation, 
+cross-platform, build tool.
+Think of SCons as an improved
+substitute for the classic
+<tt>Make</tt> utility
+with integrated functionality
+similar to <tt>autoconf</tt>/<tt>automake</tt>
+and compiler caches such as <tt>ccache</tt>.
+</p>
+
+<p>
+Unlike build tools that invent their own mini-language
+or wedge a scripting language onto some other
+configuration file syntax,
+SCons configuration files
+are actually Python scripts.
+The ability to script your build
+gives you a tremendous amount of flexibility
+to solve complicated build problems
+in surprisingly small amounts of maintainable code.
+</p>
+
+<p>
+In short, SCons is an easier, more flexible
+and more reliable way to build software.
+</p>
+
+<h3>-----</h3>
+
+<h3>Mission</h3>
+
+<p>The goal of The SCons Project
+is to become the premiere enterprise-quality tool for
+building cross-platform, multi-language software projects
+by offering unparalleled <b>reliability</b> and <b>flexibility</b>
+to software buildmasters and developers.
+</p>
+
+<p>
+Yeah, every project has similar lofty mom-and-apple-pie goals,
+blah, blah, blah...
+So why is SCons any different?
+Fair question.
+If you go to our public home page at
+<a href="http://www.scons.org/">http://www.scons.org</a>
+you'll get the usual lists of
+supported features and platforms, testimonials, etc.
+But you're presumably at <emphasis>this</emphasis>
+project page because you're interested in digging a little deeper.
+So here are the <emphasis>philosophical viewpoints</emphasis>
+that we think contribute to SCons being
+a really distinctive software build tool:
+</p>
+
+<dl>
+<dt>
+<b>Software builds are getting more complicated, not less</b>
+</dt>
+<dd>
+XXX
+</dd>
+<dt>
+<b>Making software build reliably is not a language design issue</b>
+</dt>
+<dd>
+XXX
+</dd>
+<dt>
+<b>You want to encapsulate software build complexity
+so most developers don't even have to think about it</b>
+</dt>
+<dd>
+XXX
+</dd>
+<dt>
+<b>Overall, a reliable build that takes a little longer is
+cheaper than a fast build that you can't rely on</b>
+</dt>
+<dd>
+XXX
+</dd>
+<dt>
+<b>Building software in multiple side-by-side variants is crucial
+in a multi-platform world</b>
+</dt>
+<dd>
+XXX
+</dd>
+</dl>
+
+<p>What is the scope of this project?
+</p>
+
+<p>For example:</p>
+
+<ul>
+<li>Develop just enough functionality to scratch a particular itch</li>
+<li>Build a tool just like XYZ, but less broken</li>
+<li>Build the best XYZ-tool ever!</li>
+</ul>
+
+
+<p>What are high-level features you are sure to build?
+</p>
+<ul>
+
+<li>What would you write on a billboard about your project? Users
+might only look for a few seconds.</li>
+
+<li>Use the issue tracker to track features and enhancement
+requests. It is not just for bugs, pre-populate it with feature
+descriptions so that potential contributors know what you would like them
+to work on.</li>
+</ul>
+
+<p>What are the high-level assumptions or ground rules for the project?
+</p>
+
+<p>For example:
+</p>
+
+<ul>
+<li> we will use programming language X on operating system Y for now.
+
+<li>We will, or will not, consider certain functional areas like
+internationalization, high security, concurrency, etc.  The list of
+functional areas will depend on what you are trying to do.
+
+<li>Try to keep this part short.
+</ul>
+
+
+<h3>Related resources</h3>
+
+<ul>
+<li>Link to other stuff that you know about.  It will help you
+research requirements and provide a useful resource to potential
+contributors.</li>
+
+<li>Why reinvent the wheel? What is better about this wheel?  Is there
+any existing project that you can partner with or reuse?</li>
+
+<li>Where would you go to try to find potential contibutors?</li>
+</ul>
+
+</body>
+</html>

@@ -1,0 +1,10 @@
+Here you'll find plain text documentation of how to handle various SCons
+project procedures.  Files contained herein:
+
+change.txt
+        How changes are integrated, including generating and
+        distributing aedist change sets, and updating the CVS repository
+        on SourceForge.
+
+release.txt
+	Steps to go through when releasing a new version of SCons.

@@ -1,0 +1,26 @@
+<li><a href="http://www.scons.org/">SCons Home Page</a></li>
+<li><a href="/servlets/ProjectMemberList">Project Membership</a></li>
+</dd>
+<dd>
+<li><a href="/servlets/Announcements">Announcements</a></li>
+<!--
+<li><a href="/servlets/ProjectForumView">Discussion forums</a></li>
+-->
+<li><a href="/servlets/ProjectMailingListList">Mailing lists</a></li>
+</dd>
+<dd>
+<li><a href="/servlets/ProjectDocumentList">Documents &amp; files</a></li>
+<li><a href="/source/browse/scons/">Subversion</a></li>
+</dd>
+<dd>
+<li>
+<a href="/servlets/ProjectIssues">Issue Tracker</a>
+<ul>
+<li><a href="http://scons.tigris.org/bug-submission.html">Submit a Bug</a></li>
+<li><a href="http://scons.tigris.org/patch-submission.html">Submit a Patch</a></li>
+<li><a href="http://scons.tigris.org/feature-request.html">Submit a Feature Request</a></li>
+</ul>
+</li>
+</dd>
+<dd>
+<li><a href="http://scons.tigris.org/roadmap.html">Road map</a></li>

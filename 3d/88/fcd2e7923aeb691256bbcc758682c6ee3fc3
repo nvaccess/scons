@@ -1,0 +1,48 @@
+  A new SCons checkpoint release, 2.4.2.alpha.yyyymmdd, is now available
+  on the SCons download page:
+
+          http://www.scons.org/download.php
+
+  Here is a summary of the changes since 2.3.6:
+
+  NEW FUNCTIONALITY
+
+    - None
+
+  DEPRECATED FUNCTIONALITY
+
+    - None
+
+  CHANGED/ENHANCED EXISTING FUNCTIONALITY
+
+    - Switched several core classes to using "slots", for
+      reducing the overall memory consumption in large
+      projects (fixes #2180, #2178, #2198)
+    - Memoizer counting uses decorators now, instead of
+      the old metaclasses approach.
+
+  FIXES
+
+    - 2180, 2178, 2198 (See above)
+
+  IMPROVEMENTS
+
+    - See CHANGED/ENHANCED EXISTING FUNCTIONALITY above
+
+  PACKAGING
+
+    - None
+
+  DOCUMENTATION
+
+    - Bug 2504 - Fixed incorrect default SWIGPATH in documentation
+
+  DEVELOPMENT
+
+    - None
+
+  Thanks to Dirk Baechle, and Andrew Featherstone for their contributions to this release.
+  Contributors are listed alphabetically by their last name.
+
+__COPYRIGHT__
+__FILE__ __REVISION__ __DATE__ __DEVELOPER__

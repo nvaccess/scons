@@ -1,0 +1,124 @@
+<!--
+
+  Copyright (c) 2001, 2002, 2003 Steven Knight
+
+  Permission is hereby granted, free of charge, to any person obtaining
+  a copy of this software and associated documentation files (the
+  "Software"), to deal in the Software without restriction, including
+  without limitation the rights to use, copy, modify, merge, publish,
+  distribute, sublicense, and/or sell copies of the Software, and to
+  permit persons to whom the Software is furnished to do so, subject to
+  the following conditions:
+
+  The above copyright notice and this permission notice shall be included
+  in all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY
+  KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
+  WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+  NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+  LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+  OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+  WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+-->
+
+<!--
+
+=head2 Adding new methods
+
+For slightly more demanding changes, you may wish to add new methods to the
+C<cons> package. Here's an example of a very simple extension,
+C<InstallScript>, which installs a tcl script in a requested location, but
+edits the script first to reflect a platform-dependent path that needs to be
+installed in the script:
+
+  # cons::InstallScript - Create a platform dependent version of a shell
+  # script by replacing string ``#!your-path-here'' with platform specific
+  # path $BIN_DIR.
+
+  sub cons::InstallScript {
+	my ($env, $dst, $src) = @_;
+	Command $env $dst, $src, qq(
+		sed s+your-path-here+$BIN_DIR+ %< > %>
+		chmod oug+x %>
+	);
+  }
+
+Notice that this method is defined directly in the C<cons> package (by
+prefixing the name with C<cons::>). A change made in this manner will be
+globally visible to all environments, and could be called as in the
+following example:
+
+  InstallScript $env "$BIN/foo", "foo.tcl";
+
+For a small improvement in generality, the C<BINDIR> variable could be
+passed in as an argument or taken from the construction environment-,-as
+C<%BINDIR>.
+
+
+=head2 Overriding methods
+
+Instead of adding the method to the C<cons> name space, you could define a
+new package which inherits existing methods from the C<cons> package and
+overrides or adds others. This can be done using Perl's inheritance
+mechanisms.
+
+The following example defines a new package C<cons::switch> which
+overrides the standard C<Library> method. The overridden method builds
+linked library modules, rather than library archives. A new
+constructor is provided. Environments created with this constructor
+will have the new library method; others won't.
+
+  package cons::switch;
+  BEGIN {@ISA = 'cons'}
+
+  sub new {
+	shift;
+	bless new cons(@_);
+  }
+
+  sub Library {
+	my($env) = shift;
+	my($lib) = shift;
+	my(@objs) = Objects $env @_;
+	Command $env $lib, @objs, q(
+		%LD -r %LDFLAGS %< -o %>
+	);
+  }
+
+This functionality could be invoked as in the following example:
+
+  $env = new cons::switch(@overrides);
+  ...
+  Library $env 'lib.o', 'foo.c', 'bar.c';
+
+-->
+
+ <para>
+
+   X
+
+ </para>
+
+ <section>
+ <title>Builders That Execute External Commands</title>
+
+   <para>
+
+   X
+
+   </para>
+
+ </section>
+
+ <section>
+ <title>Builders That Execute Python Functions</title>
+
+   <para>
+
+   X
+
+   </para>
+
+ </section>

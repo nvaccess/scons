@@ -1,0 +1,1163 @@
+.\" Copyright (c) 2001 Steven Knight
+.\"
+.\" Permission is hereby granted, free of charge, to any person obtaining
+.\" a copy of this software and associated documentation files (the
+.\" "Software"), to deal in the Software without restriction, including
+.\" without limitation the rights to use, copy, modify, merge, publish,
+.\" distribute, sublicense, and/or sell copies of the Software, and to
+.\" permit persons to whom the Software is furnished to do so, subject to
+.\" the following conditions:
+.\"
+.\" The above copyright notice and this permission notice shall be included
+.\" in all copies or substantial portions of the Software.
+.\"
+.\" THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY
+.\" KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
+.\" WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+.\" NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+.\" LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+.\" OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+.\" WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+.\"
+.\" __FILE__ __REVISION__ __DATE__ __DEVELOPER__
+.\"
+.TH SCONS 1 "December 2001"
+.SH NAME
+scons \- software constructor
+.SH SYNOPSIS
+.B scons
+[
+.IR options ...
+]
+[
+.IR targets ...
+]
+.SH DESCRIPTION
+
+The 
+.B scons 
+utility builds software (or other files) by determining which
+component pieces must be rebuilt and executing the necessary commands to
+rebuild them.
+
+By default, 
+.B scons 
+searches for a file named 
+.IR SConstruct ,
+.IR Sconstruct ,
+or
+.I sconstruct
+(in that order) in the current directory and reads its
+configuration from the first file found.  An alternate file name may be
+specified via the 
+.B -f
+option. If the specified file is not
+in the local directory, 
+.B scons 
+will internally change its working
+directory (chdir) to the directory containing the file.
+
+The configuration file specifies the files to be built, and
+(optionally) the rules to build those files.  Reasonable default
+rules exist for building common software components (executable
+programs, object files, libraries), so that for simple software
+projects, only the target and input files need be specified.
+
+.B scons
+can scan known input files automatically for dependency
+information (for example, #include statements
+in C or C++ files) and will rebuild dependent files appropriately
+whenever any "included" input file changes. 
+.B scons
+supports the
+ability to define new scanners for unknown input file types.
+
+.B scons
+is normally executed in a top-level directory containing a
+.I SConstruct
+file, specifying the target or targets to be built as
+command-line arguments.  The command
+
+.IP
+.nf
+scons .
+.PP
+.fi
+
+will build all target files in or below the current directory 
+.RI ( . ")."
+
+.IP
+.nf
+scons /
+.PP
+.fi
+
+will build all target files in or below the root directory (i.e.,
+all files).  Specific targets may be supplied:
+
+.IP
+.nf
+scons foo bar
+.PP
+.fi
+
+Targets may be omitted from the command line,
+in which case the targets specified
+in the configuration file(s) as
+.B Default
+targets will be built:
+
+.IP
+.nf
+scons
+.PP
+.fi
+
+Specifying "cleanup" targets in configuration files is not
+necessary.  The 
+.B -c
+flag removes all files
+necessary to build the specified target:
+.IP
+.nf
+scons -c .
+.PP
+.fi
+to remove all target files, or:
+.IP
+.nf
+scons -c build export
+.PP
+.fi
+to remove target files under build and export.
+
+A subset of a hierarchical tree may be built by
+remaining at the top-level directory (where the 
+.I SConstruct
+file lives) and specifying the subdirectory as the target to be
+built:
+
+.IP
+.nf
+scons src/subdir
+.PP
+.fi
+
+.\" or changing directory and invoking scons with the
+.\" .B -u
+.\" option, which traverses up the directory
+.\" hierarchy until it finds the 
+.\" .I SConstruct
+.\" file, and then builds
+.\" targets relatively to the current subdirectory:
+.\" 
+.\" .RS
+.\" cd src/subdir
+.\" .RE
+.\" .RS
+.\" scons -u .
+.\" .RE
+
+.B scons
+supports building multiple targets in parallel via a
+.B -j
+option that takes, as its argument, the number
+of simultaneous tasks that may be spawned:
+
+.IP
+.nf
+scons -j 4
+.PP
+.fi
+
+builds four targets in parallel, for example.
+
+.\" Values of variables to be passed to the configuration file(s)
+.\" may be specified on the command line:
+.\" 
+.\" .IP
+.\" .nf
+.\" scons debug=1 .
+.\" .PP
+.\" .fi
+.\" 
+.\" These variables can be used in the configuration file(s) to modify
+.\" the build in any way.
+.\" 
+.\" .B scons
+.\" can maintain a cache of target (derived) files that can
+.\" be shared between multiple builds.  When caching is enabled in a
+.\" configuration file, any target files built by 
+.\" .B scons
+.\" will be copied
+.\" to the cache.  If an up-to-date target file is found in the cache, it
+.\" will be retrieved from the cache instead of being rebuilt locally.
+.\" Caching behavior may be disabled and controlled in other ways by the
+.\" .BR --cache-force , 
+.\" .BR --cache-disable ,
+.\" and
+.\" .B --cache-show
+.\" command-line options.  The
+.\" .B --random
+.\" option is useful whenever multiple builds may be
+.\" trying to update the cache simultaneously.
+
+.SH OPTIONS
+In general, 
+.B scons 
+supports the same command-line options as GNU
+.BR make , 
+and many of those supported by 
+.BR cons .
+
+.IP -b
+Ignored for compatibility with non-GNU versions of
+.BR make.
+
+.IP "-c, --clean, --remove"
+Clean up by removing all target files for which a construction
+command is specified.
+
+.\" ".IP --cache-disable, --no-cache"
+.\" Disable caching.  Will neither retrieve files from cache nor flush
+.\" files to cache.  Has no effect if use of caching is not specified
+.\" in a configuration file.
+.\" 
+.\" .IP "--cache-force, --cache-populate"
+.\" Populate a cache by forcing any already-existing up-to-date
+.\" target files to the cache, in addition to files built by this
+.\" invocation.  This is useful to populate a new cache with
+.\" appropriate target files, or to make available in the cache
+.\" any target files recently built with caching disabled via the
+.\" .B --cache-disable
+.\" option.
+.\" 
+.\" .IP --cache-show
+.\" When retrieving a target file from a cache, show the command
+.\" that would have been executed to build the file.  This produces
+.\" consistent output for build logs, regardless of whether a target
+.\" file was rebuilt or retrieved from cache.
+
+.TP 
+.RI "-C" " directory" ",  --directory=" directory
+Change to the specified 
+.I directory
+before searching for the 
+.IR SConstruct ,
+.IR Sconstruct ,
+or
+.I sconstruct
+file, or doing anything
+else.  Multiple 
+.B -C
+options are interpreted
+relative to the previous one, and the right-most
+.B -C
+option wins. (This option is nearly
+equivalent to 
+.BR "-f directory/SConstruct" ,
+except that it will search for
+.IR SConstruct ,
+.IR Sconstruct , 
+or
+.I sconstruct
+in the specified directory.)
+
+.\" .IP -d
+.\" Display dependencies while building target files.  Useful for
+.\" figuring out why a specific file is being rebuilt, as well as
+.\" general debugging of the build process.
+
+.TP
+.RI --debug= type
+Print debugging information durring the build process.
+.I type
+specifies what type of of debugging information to print. Currently the
+only supported type is
+.I tree
+which causes the dependency tree to be printed after each top-level
+target is built.
+
+.IP "-e, --environment-overrides"
+Variables from the execution environment override construction
+variables from the configuration files.
+
+.TP
+.RI -f " file" ", --file=" file ", --makefile=" file ", --sconstruct=" file
+Use 
+.I file 
+as the initial configuration
+file. If 
+.I file
+is in another directory,
+.B scons 
+will change to that directory before building targets.
+
+.IP "-h, --help"
+Print a local help message for this build, if one is defined in
+the configuration file(s), plus a line that describes the 
+.B -H
+option for command-line option help.  If no local help message
+is defined, prints the standard help message about command-line
+options.  Exits after displaying the appropriate message.
+
+.IP "-H, --help-options"
+Print the standard help message about command-line options and
+exit.
+
+.IP "-i, --ignore-errors"
+Ignore all errors from commands executed to rebuild files.
+
+.TP 
+.RI -I " directory" ", --include-dir=" directory
+Specifies a 
+.I directory
+to search for
+imported Python modules.  If several 
+.B -I
+options
+are used, the directories are searched in the order specified.
+
+.TP
+.RI -j " N" ", --jobs=" N
+Specifies the number of jobs (commands) to run simultaneously.
+If there is more than one 
+.B -j 
+option, the last one is effective.
+
+.\" ??? If the 
+.\" .B -j 
+.\" option
+.\" is specified without an argument,
+.\" .B scons 
+.\" will not limit the number of
+.\" simultaneous jobs.
+
+.IP "-k, --keep-going"
+Continue as much as possible after an error.  The target that
+failed and those that depend on it will not be remade, but other
+targets specified on the command line will still be processed.
+
+.\" .TP
+.\" .RI  -l " N" ", --load-average=" N ", --max-load=" N
+.\" No new jobs (commands) will be started if
+.\" there are other jobs running and the system load
+.\" average is at least 
+.\" .I N
+.\" (a floating-point number).
+.\" 
+.\" .IP --list-derived
+.\" List derived files (targets, dependencies) that would be built,
+.\" but do not build them.
+.\" [XXX This can probably go away with the right
+.\" combination of other options.  Revisit this issue.]
+.\" 
+.\" .IP --list-actions
+.\" List derived files that would be built, with the actions
+.\" (commands) that build them.  Does not build the files.
+.\" [XXX This can probably go away with the right
+.\" combination of other options.  Revisit this issue.]
+.\" 
+.\" .IP --list-where
+.\" List derived files that would be built, plus where the file is
+.\" defined (file name and line number).  Does not build the files.
+.\" [XXX This can probably go away with the right
+.\" combination of other options.  Revisit this issue.]
+
+.IP -m
+Ignored for compatibility with non-GNU versions of
+.BR make .
+
+.IP "-n, --just-print, --dry-run, --recon"
+No execute.  Print the commands that would be executed to build
+any out-of-date target files, but do not execute the commands.
+
+.\" .TP
+.\" .RI -o " file" ", --old-file=" file ", --assume-old=" file
+.\" Do not rebuild 
+.\" .IR file ,
+.\" and do
+.\" not rebuild anything due to changes in the contents of
+.\" .IR file .
+.\" 
+.\" .TP 
+.\" .RI --override " file"
+.\" Read values to override specific build environment variables
+.\" from the specified 
+.\" .IR file .
+.\"
+.\" .IP -p
+.\" Print the data base (construction environments,
+.\" Builder and Scanner objects) that are defined
+.\" after reading the configuration files.
+.\" After printing, a normal build is performed
+.\" as usual, as specified by other command-line options.
+.\" This also prints version information
+.\" printed by the 
+.\" .B -v
+.\" option.
+.\"
+.\" To print the database without performing a build do:
+.\" .IP
+.\" .nf
+.\" scons -p -q
+.\" .PP
+.\" .fi
+.\"
+.\" .IP "-q, --question"
+.\" Do not run any commands, or print anything.  Just return an exit
+.\" status that is zero if the specified targets are already up to
+.\" date, nonzero otherwise.
+.\"
+.\" .IP "-r, -R, --no-builtin-rules, --no-builtin-variables"
+.\" Clear the default construction variables.  Construction
+.\" environments that are created will be completely empty.
+.\"
+.\" .IP --random
+.\" Build dependencies in a random order.  This is useful when
+.\" building multiple trees simultaneously with caching enabled as a
+.\" way to prevent multiple builds from simultaneously trying to build
+.\" or retrieve the same target files.
+
+.IP "-s, --silent, --quiet"
+Silent.  Do not print commands that are executed to rebuild
+target files.
+
+.IP "-S, --no-keep-going, --stop"
+Ignored for compatibility with GNU 
+.BR make .
+
+.IP "-t, --touch"
+Ignored for compatibility with GNU
+.BR make .  
+Touching a file to make it
+appear up-to-date is unnecessary when using 
+.BR scons .)
+
+.\" .IP -u
+.\" Traverse up directories until an 
+.\" .I SConstruct
+.\" or 
+.\" .I sconstruct
+.\" file is found, and use that
+.\" as the top of the directory tree.  Only targets at or below the
+.\" current directory will be built.
+
+.IP "-v, --version"
+Print the 
+.B scons
+version, copyright information,
+list of authors, and any other relevant information.
+Then exit.
+
+.IP "-w, --print-directory"
+Print a message containing the working directory before and
+after other processing.
+
+.IP --no-print-directory
+Turn off -w, even if it was turned on implicitly.
+
+.\" .TP
+.\" .RI --write-filenames= file
+.\" Write all filenames considered into
+.\" .IR file .
+.\"
+.\" .TP
+.\" .RI -W " file" ", --what-if=" file ", --new-file=" file ", --assume-new=" file
+.\" Pretend that the target 
+.\" .I file 
+.\" has been
+.\" modified.  When used with the 
+.\" .B -n
+.\" option, this
+.\" show you what would be rebuilt if you were to modify that file.
+.\" Without 
+.\" .B -n
+.\" ... what? XXX
+.\"
+.\" .IP --warn-undefined-variables
+.\" Warn when an undefined variable is referenced.
+.\"
+.\" .TP 
+.\" .RI -Y " repository" ", --repository=" repository
+.\" Search the specified repository for any input and target
+.\" files not found in the local directory hierarchy.  Multiple
+.\" .B -Y
+.\" options may specified, in which case the
+.\" repositories are searched in the order specified.
+
+.SH CONFIGURATION FILE REFERENCE
+A construction environment is the basic means by which the configuration
+files communicate build information to 
+.BR scons .
+A new construction environment is created using the 
+.B Environment 
+function:
+
+.IP
+.nf 
+env = Environment()
+.PP
+.fi
+
+Build rules are specified by calling builder methods on a construction
+environment. The arguments to the builder methods are target (a list of
+target files) and source (a list of source files). If a string is given
+for target or source, then 
+.B scons 
+interprets it as a space delimited list
+of files. The following are examples of calling a builder:
+
+.IP
+.nf
+env.Program(target = 'bar', source = 'bar.c foo.c')
+env.Program('bar', 'bar.c foo.c')
+env.Program('bar', ['bar.c', 'foo.c'])
+.PP
+.fi
+
+.B scons
+provides the following builders:
+
+.IP Object
+Builds an object file from one or more C/C++ source files. Source files
+must have one of the following extensions: .c, .C, .cc, .cpp, .cxx, .c++, .C++. 
+The target object file prefix and suffix (if any) are automatically
+added. Example:
+.IP
+.nf
+env.Object(target = 'bar', source = 'bar.c')
+.PP
+.fi
+
+.IP Program
+Builds an executable given one or more object files or C/C++ source
+files. If any C/C++ source files are given, then they will be automatically
+compiled to object files. The executable prefix and suffix (if any) are
+automatically added to the target. Example:
+.IP
+.nf
+env.Program(target = 'bar', source = 'bar.c foo.o')
+.PP
+.fi
+
+.IP Library
+Builds a library given one or more object files or C/C++ source
+files. If any C/C++ source files are given, then they will be automatically
+compiled to object files. The library prefix and suffix (if any) are
+automatically added to the target. Example:
+.IP
+.nf
+env.Library(target = 'bar', source = 'bar.c foo.o')
+.PP
+.fi
+
+.IP CFile
+Builds a C source file given a lex (.l) or yacc (.y) input file.
+The hard-coded suffix .c is
+automatically added to the target
+if it is not already present. Example:
+.IP
+.nf
+env.CFile(target = 'foo.c', source = 'foo.l') # builds foo.c
+env.CFile(target = 'bar', source = 'bar.y')   # builds bar.c
+.PP
+.fi
+
+.LP
+
+C/C++ source files are automatically scanned for dependencies by 
+.B scons
+so the dependencies do not need to be provided. In addition, all builder
+targets automatically depend on their sources. An explicit dependency can
+be specified using the 
+.B Depends 
+method of a construction environment:
+
+.IP
+.nf
+env.Depends('foo.c', 'foo.h')
+.PP
+.fi
+
+When
+.B scons
+is executed it will build the targets given as arguments on the command
+line. Default targets can be specified using the 
+.B Default 
+function:
+
+.IP
+.nf
+Default('foo', 'bar', 'baz')
+.PP
+.fi
+
+A configuration file can specify other configuration files to execute using
+the 
+.B SConscript 
+function:
+
+.IP
+.nf
+SConscript('dir/SConscript')
+.PP
+.fi
+
+A construction environment has an associated dictionary of construction
+variables that are used by built-in or user-supplied build rules. A number
+of useful construction variables are automatically defined by scons for
+each supported platform, and additional construction variables can be defined
+by the user. The following is a list of the automatically defined construction
+variables:
+
+.IP CC 
+The C compiler.
+
+.IP CCFLAGS 
+General options that are passed to the C compiler.
+
+.IP CCOM 
+The command line used to compile a C source file to an object file.
+
+.IP CXX
+The C++ compiler.
+
+.IP CXXFLAGS 
+General options that are passed to the C++ compiler.
+
+.IP CXXCOM
+The command line used to compile a C++ source file to an object file.
+
+.IP CPPPATH
+The list of directories that the C preprocessor will search for include
+directories. The C/C++ implicit dependency scanner will search these
+directories for include files. Don't explicitly put include directory
+arguments in CCFLAGS or CXXFLAGS because the result will be non-portable
+and the directories will not be searched by the depedency scanner. Note:
+directory names in CPPPATH will be looked-up relative to the SConscript
+directory when they are used in a command. To force 
+.B scons
+to look-up a directory relative to the root of the source tree use #:
+.IP
+.nf
+env.Environment(CPPPATH='#/include')
+.PP
+.fi
+.RS
+The directory look-up can also be forced using the 
+.BR Dir ()
+function:
+.RE
+.IP
+.nf
+include = Dir('include')
+env.Environment(CPPPATH=include)
+.PP
+.fi
+.RE
+
+.IP LINK
+The linker.
+
+.IP LINKFLAGS
+General options passed to the linker.
+
+.IP LINKCOM
+The command line used to link object files into an executable.
+
+.IP AR
+The static library command.
+
+.IP ARFLAGS
+General options passed to the static library command.
+
+.IP ARCOM
+The command line used to generate a static library from object files.
+
+.IP LEX
+The lexical analyzer generator.
+
+.IP LEXFLAGS
+General options passed to the lexical analyzer generator.
+
+.IP LEXCOM
+The command line used to call the lexical analyzer generator
+to generate a source file.
+
+.IP YACC
+The parser generator.
+
+.IP YACCFLAGS
+General options passed to the parser generator.
+
+.IP YACCCOM
+The command line used to call the parser generator
+to generate a source file.
+
+.IP BUILDERS
+A list of the available builders.
+[CFile, Object, Program, Library] by default.
+
+.IP SCANNERS
+A list of the available implicit dependency scanners. [CScan] by default.
+
+.IP OBJPREFIX 
+The prefix used for object file names.
+
+.IP OBJSUFFIX 
+The suffix used for object file names.
+
+.IP PROGPREFIX
+The prefix used for executable file names.
+
+.IP PROGSUFFIX
+The suffix used for executable file names.
+
+.IP LIBPREFIX
+The prefix used for library file names.
+
+.IP LIBSUFFIX 
+The suffix used for library file names.
+
+.IP LIBDIRPREFIX
+The prefix used to specify a library directory on the linker command line.
+
+.IP LIBDIRASUFFIX
+The suffix used to specify a library directory on the linker command line.
+
+.IP LIBLINKPREFIX
+The prefix used to specify a library to link on the linker command line.
+
+.IP LIBLINKSUFFIX
+The suffix used to specify a library to link on the linker command line.
+
+.IP INCPREFIX
+The prefix used to specify an include directory on the C compiler command
+line.
+
+.IP INCSUFFIX
+The suffix used to specify an include directory on the C compiler command
+line.
+
+.IP ENV
+The environment to use when invoking commands.
+
+.LP
+
+Construction variables can be retrieved and set using the 
+.B Dictionary 
+method of the construction environment:
+
+.IP
+.nf
+dict = env.Dictionary()
+dict["CC"] = "cc"
+.PP
+.fi
+
+Construction variables can also be passed to the construction environment
+constructor:
+
+.IP
+.nf
+env = Environment(CC="cc")
+.PP
+.fi
+
+or when copying a construction environment using the 
+.B Copy 
+method:
+
+.IP
+.nf
+env2 = env.Copy(CC="cl.exe")
+.PP
+.fi
+
+.B scons
+also provides various function not associated with a construction
+environment that configuration files can use to affect the build:
+
+.TP
+.RI SConscript( script ", [" exports ])
+This tells
+.B scons
+to execute 
+.I script
+as a configuration file. The optional 
+.I exports
+argument provides a list of variable names to export to
+.IR script ". " exports
+can also be a space delimited string of variables names. 
+.I script
+must use the
+.BR Import ()
+function to import the variables. Any variables returned by 
+.I script 
+using 
+.BR Return ()
+will be returned by the call to
+.BR SConscript (). 
+Example:
+
+.IP
+.nf
+foo = SConscript('subdir/SConscript', "env")
+.PP
+.fi
+
+.TP
+.RI Export( vars )
+This tells 
+.B scons
+to export a list of variables from the current
+configuration file to all other configuration files. The exported variables
+are kept in a global collection, so subsequent exports
+will over-write previous exports that have the same name. 
+Multiple variable names can be passed to
+.BR Export ()
+in a space delimited string or as seperate arguments. Example:
+
+.IP
+.nf
+Export("env")
+.PP
+.fi
+
+.TP 
+.RI Import( vars )
+This tells 
+.B scons
+to import a list of variables into the current configuration file. This
+will import variables that were exported with
+.BR Export ()
+or in the 
+.I exports
+argument to 
+.BR SConscript ().
+Variables exported by 
+.BR SConscript ()
+have precedence. Multiple variable names can be passed to 
+.BR Import ()
+in a space delimited string or as seperate arguments. Example:
+
+.IP
+.nf
+Import("env")
+.PP
+.fi
+
+.TP
+.RI Return( vars )
+This tells
+.B scons
+what variable(s) to use as the return value(s) of the current configuration
+file. These variables will be returned to the "calling" configuration file
+as the return value(s) of 
+.BR SConscript ().
+Multiple variable names can be passed to 
+.BR Return ()
+in a space delimited string or as seperate arguments. Example:
+
+.IP
+.nf
+Return("foo")
+.PP
+.fi
+
+.TP 
+.RI Default( targets )
+This specifies a list of default targets. Default targets will be built by
+.B scons
+if no explicit targets are given on the comamnd line. Multiple targets can
+be specified either as a space delimited string of target file names or as
+seperate arguments.
+.BR Default ()
+will also accept the return value of any of the ccnstruction environment
+builder methods.
+
+.TP
+.RI Help( text )
+This specifies help text to be printed if the 
+.B -h 
+argument is given to
+.BR scons .
+.B scons
+will exit after printing out the help text.
+
+.TP
+.RI BuildDir( build_dir ", " src_dir ", [" duplicate ])
+This specifies a build directory to use for all derived files.  
+.I build_dir
+specifies the build directory to be used for all derived files that would
+normally be built under
+.IR src_dir .
+Multiple build directories can be set up for multiple build variants, for
+example. 
+.B scons
+will link or copy (depending on the platform) all the source files into the
+build directory if 
+.I duplicate
+is set to 1 (the default). If 
+.I duplicate
+is set to 0, then 
+.B scons 
+will not copy or link any source files, which may cause build problems in
+certain situations (e.g. C source files that are generated by the
+build). 
+.IR duplicate =0
+is usually safe, and is always more efficient than 
+.IR duplicate =1.
+
+.TP
+.RI Dir( name ", [" directory ])
+This returns an object that represents a given directory 
+.IR name . 
+.I name
+can be a relative or absolute path. 
+.I directory
+is an optional directory that will be used as the parent directory. 
+
+
+.TP 
+.RI File( name ", [" directory ])
+This returns an object that represents a given file 
+.IR name . 
+.I name
+can be a relative or absolute path. 
+.I directory
+is an optional directory that will be used as the parent directory. 
+
+
+.SH EXTENDING
+.B scons
+can be extended by adding new builders to a construction
+environment using the 
+.B Builder 
+function. Builder accepts the following
+arguments:
+
+.IP name
+The name of the builder. This will be the of the construction environment
+method used to create an instance of the builder.
+
+.IP action
+The command line string used to build the target from the source. 
+.B action
+can also be a dictionary mapping source file name suffixes to command line string,
+if the builder can accept multiple source file extensions.
+
+.IP prefix 
+The prefix that will be prepended to the target file name.
+
+.IP suffix
+The suffix that will be appended to the target file name.
+
+.IP src_suffix
+The expected source file name suffix.
+
+.IP src_builder
+Specifies a builder to use when a source file name suffix does not match
+any of the suffixes of the builder. Using this argument produces a
+multi-stage builder.
+
+.LP
+
+.B scons
+performs construction variable interpolation on the strings that make up
+the command line of builders before executing the command.
+Variables are specified by a $ prefix and the variable name may be
+surrounded by curly braces ({}) to separate the name from the trailing
+characters. Besides construction variables, scons provides the following
+variables for each command execution:
+
+.IP TARGET
+The file name of the target being built, or the file name of the first 
+target if multiple targets are being built.
+
+.IP TARGETS
+The file names of the targets being built.
+
+.IP SOURCES
+The file names of the sources of the build command.
+
+.LP 
+
+For example, given the construction variable CC='cc', targets=['foo'], and
+sources=['foo.c', 'bar.c']:
+
+.IP
+.nf
+action='$CC -c -o $TARGET $SOURCES'
+.PP
+.fi
+
+would produce the command line:
+
+.IP
+.nf
+cc -c -o foo foo.c bar.c
+.PP
+.fi
+
+.\" XXX document how to add user defined scanners. 
+
+.SH EXAMPLES
+
+To help you get started using SCons
+(in lieu of a complete user guide),
+here is a
+brief overview of how to perform some common tasks:
+
+.SS Basic Compilation From a Single Source File
+
+.RS
+.nf
+env = Environment()
+env.Program(target = 'foo', source = 'foo.c')
+.RE
+.fi
+
+.SS Basic Compilation From Multiple Source Files
+
+.RS
+.nf
+env = Environment()
+env.Program(target = 'foo', source = 'f1.c f2.c f3.c')
+.RE
+.fi
+
+.SS Setting a Compilation Flag
+
+.RS
+.nf
+env = Environment(CCFLAGS = '-g')
+env.Program(target = 'foo', source = 'foo.c')
+.RE
+.fi
+
+.SS Search The Local Directory For .h Files
+
+Note:  You do
+.I not
+need to specify -I options by hand.
+SCons will construct the right -I options from CPPPATH.
+
+.RS
+.nf
+env = Environment(CPPPATH = ['.'])
+env.Program(target = 'foo', source = 'foo.c')
+.RE
+.fi
+
+.SS Search Multiple Directories For .h Files
+
+.RS
+.nf
+env = Environment(CPPPATH = ['include1', 'include2'])
+env.Program(target = 'foo', source = 'foo.c')
+.RE
+.fi
+
+.SS Defining Your Own Builder Object
+
+You
+.I must
+specify a "name" keyword argument for the builder,
+as that becomes the Environment method name
+you use to call the builder.
+Notice also that you can leave off the suffixes,
+and the builder will add them automatically.
+
+.RS
+.nf
+bld = Builder(name = 'PDFBuilder',
+              action = 'pdftex < $SOURCES > $TARGET'
+              suffix = '.pdf',
+              src_suffix = '.tex')
+env = Environment(BUILDERS = [bld])
+env.PDFBuilder(target = 'foo.pdf', source = 'foo.tex')
+
+# The following creates "bar.bdf" from "bar.text"
+env.PDFBuilder(target = 'bar', source = 'bar')
+.RE
+.fi
+
+.SS Creating a Hierarchical Build
+
+Notice that the file names specified in a subdirectory
+are relative to that subdirectory.
+
+.RS
+.nf
+SConstruct:
+
+    env = Environment()
+    env.Program(target = 'foo', source = 'foo.c')
+
+    SConscript('sub/SConscript')
+
+sub/SConscript:
+
+    env = Environment()
+    # Builds sub/foo from sub/foo.c
+    env.Program(target = 'foo', source = 'foo.c')
+
+    SConscript('dir/SConscript')
+
+sub/dir/SConscript:
+
+    env = Environment()
+    # Builds sub/dir/foo from sub/dir/foo.c
+    env.Program(target = 'foo', source = 'foo.c')
+.RE
+.fi
+
+.SS Sharing Variables Between SConscript Files
+
+You must explicitly Export() and Import() variables that
+you want to share between SConscript files.
+
+.RS
+.nf
+SConstruct:
+
+    env = Environment()
+    env.Program(target = 'foo', source = 'foo.c')
+
+    Export("env")
+    SConscript('subdirectory/SConscript')
+
+subdirectory/SConscript:
+
+    Import("env")
+    env.Program(target = 'foo', source = 'foo.c')
+.RE
+.fi
+
+.SH ENVIRONMENT
+
+.IP SCONS_LIB_DIR
+Specifies the directory that contains the SCons Python module directory
+(e.g. /home/aroach/scons-src-0.01/src/engine).
+
+.IP SCONSFLAGS
+A string of options that will be used by scons in addition to those passed
+on the command line.
+
+.SH "SEE ALSO"
+.B scons
+User Manual,
+.B scons
+Design Document,
+.B scons
+source code.
+
+.SH AUTHORS
+Steven Knight <knight@baldmt.com>
+.RS
+.RE
+Anthony Roach <aroach@electriceyeball.com>
+

@@ -1,0 +1,19 @@
+<!--
+__COPYRIGHT__
+
+This file is processed by the bin/SConsDoc.py module.
+See its __doc__ string for a discussion of the format.
+-->
+<tool name="intelc">
+<summary>
+XXX
+</summary>
+</tool>
+
+<cvar name="INTEL_C_COMPILER_VERSION">
+<summary>
+Set by the "intelc" Tool
+to the major version number of the Intel C compiler
+selected for use.
+</summary>
+</cvar>

@@ -1,0 +1,24 @@
+<html>
+<head>
+</head>
+<body>
+
+<p>
+<strong>17 May 2007:</strong>
+Release candidate 0.97 is now available at the
+<a href="http://sourceforge.net/project/showfiles.php?group_id=30337">download page</a>.
+</p>
+
+<p>
+<strong>12 April 2007:</strong>
+SCons awarded two
+Google
+<a href="http://code.google.com/soc/">Summer of Code</a> 2007 projects.
+Congratulations to MAciej Pasternacki and Thomas Fischer,
+who will work on (respectively)
+configuration features modeled after GNU Automake,
+and distributed compilation across grid networks.
+</p>
+
+</body>
+</html>

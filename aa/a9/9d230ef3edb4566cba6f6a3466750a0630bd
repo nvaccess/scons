@@ -1,0 +1,188 @@
+#
+# Construct file to build scons during development.
+# (Kind of ironic that we're using the classic Perl Cons
+# to build its Python child...)
+#
+$project = 'scons';
+
+$env = new cons( ENV => {
+			  AEGIS_PROJECT => $ENV{AEGIS_PROJECT},
+			  PATH => $ENV{PATH},
+			} );
+
+Default qw( . );
+
+#
+# An internal "whereis" routine to figure out if we have a
+# given program available.  Put it in the "cons::" package
+# so subsidiary Conscript files can get at it easily, too.
+#
+use Config;
+sub cons::whereis {
+    my $file = shift;
+    foreach my $dir (split(/$Config{path_sep}/, $ENV{PATH})) {
+	$f = File::Spec->catfile($dir, $file);
+	return $f if -x $f;
+    }
+    return undef
+}
+
+#
+# We let the presence or absence of various utilities determine
+# whether or not we bother to build certain pieces of things.
+# This will allow people to still do SCons work even if they
+# don't have Aegis or RPM installed, for example.
+#
+$aegis = cons::whereis('aegis');
+$aesub = cons::whereis('aesub');
+$rpm = cons::whereis('rpm');
+$jw = cons::whereis('jw');
+
+#
+# Now grab the information that we "build" into the files (using sed).
+#
+chomp($date = $ARG{date});
+if (! $date) {
+    ($sec,$min,$hour,$mday,$mon,$year) = localtime(time);
+    $year += 1900;
+    $date = sprintf("%4d/%02d/%02d %02d:%02d:%02d",
+		    $year, $mon, $mday, $hour, $min, $sec);
+}
+
+$developer = $ARG{developer} || $ENV{USERNAME} || $ENV{LOGNAME} || $ENV{USER};
+
+$revision = $ARG{version};
+chomp($revision = `$aesub '\$version' 2>/dev/null`) if $aesub && ! $revision;
+$revision = '0.01' if ! $revision;
+
+$change = $ARG{change};
+chomp($change = `$aesub '\$change' 2>/dev/null`) if $aesub && ! $change;
+
+@arr = split(/\./, $revision);
+@arr = ($arr[0], map {length($_) == 1 ? "0$_" : $_} @arr[1 .. $#arr]);
+$revision = join('.', @arr);
+pop @arr if $#arr >= 2;
+map {s/^[CD]//, s/^0*(\d\d)$/$1/} @arr;
+$version = join('.', @arr);
+
+#
+# Use %(-%) around the date so date changes don't cause rebuilds.
+#
+$sed_cmd = "sed" .
+       " %( -e 's+__DATE__+$date+' %)" .
+       " -e 's+__DEVELOPER__+$developer+'" .
+       " -e 's+__REVISION__+$revision+'" .
+       " -e 's+__VERSION__+$version+'" .
+       " %< > %>";
+
+#
+# Run everything in the MANIFEST through the sed command we concocted.
+#
+chomp(@files = `cat src/MANIFEST`);
+
+foreach $file (@files) {
+    Command $env "build/$file", "src/$file", $sed_cmd;
+}
+
+#
+# Use the Python distutils to generate the packages.
+#
+$tar_gz = "build/dist/$project-$version.tar.gz";
+
+@setup_args = ('bdist sdist');
+
+@targets = (
+    "build/dist/$project-$version.linux-i686.tar.gz",
+    $tar_gz,
+);
+
+if ($rpm) {
+    push(@setup_args, 'bdist_rpm');
+
+    push(@targets,
+	"build/build/bdist.linux-i686/rpm/SOURCES/$project-$version.tar.gz",
+	"build/build/bdist.linux-i686/rpm/SPECS/$project.spec",
+	"build/dist/$project-$version-1.src.rpm",
+	"build/dist/$project-$version-1.noarch.rpm",
+    );
+};
+
+
+$env->Command([@targets],
+	      map("build/$_", @files),
+	      qq(rm -rf build/build build/dist/*
+		 cd build && python setup.py @setup_args)
+	     );
+
+$env->Depends([@targets], 'build/MANIFEST');
+
+#
+# Unpack the .tar.gz created by the distutils into build/test, and
+# add the TestCmd.py module.  The runtest.py script will set PYTHONPATH
+# so that the tests only look under build/test.  This makes sure that
+# our tests pass with what we really packaged, not because of something
+# hanging around in the development directory.
+#
+$test_dir = "build/test";
+
+@test_files = map("$test_dir/$project-$version/$_", @files);
+
+Command $env [@test_files], $tar_gz, qq(
+    rm -rf $test_dir/$project-$version
+    tar zxf %< -C $test_dir
+);
+
+Export qw( env test_dir );
+
+Build "etc/Conscript";
+
+#
+# Documentation.
+#
+if ($jw) {
+    Link 'build/doc' => 'doc';
+
+    Export qw( date env revision version );
+
+    Build 'build/doc/Conscript';
+}
+
+#
+# If we're running in the actual Aegis project, pack up a complete
+# source .tar.gz from the project files and files in the change,
+# so we can share it with helpful developers who don't use Aegis.
+#
+# First, lie and say that we've seen any files removed by this
+# change, so they don't get added to the source files list
+# that goes into the archive.
+#
+
+if ($change) {
+    foreach (`aegis -list -unf -c $change cf 2>/dev/null`) {
+	$seen{"$1\n"}++ if /^(?:source|test) remove(?:\s.*)+\s(\S+)$/;
+    }
+
+    eval '@src_files = grep(! $seen{$_}++,
+		    `aegis -list -terse pf 2>/dev/null`,
+		    `aegis -list -terse cf 2>/dev/null`)';
+
+    @src_files = grep($_ !~ /(\.aeignore|\.consign)$/, @src_files);
+
+    if (@src_files) {
+	chomp(@src_files);
+
+	foreach $file (@src_files) {
+	    $env->Command("build/$project-src/$file", $file, $sed_cmd);
+	}
+
+	$env->Command("build/dist/$project-src-$version.tar.gz",
+    		      $tar_gz,
+		      map("build/$project-src/$_", @src_files),
+		      qq(
+		rm -rf build/$project-src-$version
+		cp -r build/$project-src build/$project-src-$version
+		find build/$project-src-$version -name .consign -exec rm {} \\;
+		cd build && tar zcf dist/%>:f $project-src-$version
+	));
+    }
+}

@@ -1,0 +1,189 @@
+#
+# Conscript file for building SCons documentation.
+#
+
+#
+# Copyright (c) 2001 Steven Knight
+#
+# Permission is hereby granted, free of charge, to any person obtaining
+# a copy of this software and associated documentation files (the
+# "Software"), to deal in the Software without restriction, including
+# without limitation the rights to use, copy, modify, merge, publish,
+# distribute, sublicense, and/or sell copies of the Software, and to
+# permit persons to whom the Software is furnished to do so, subject to
+# the following conditions:
+#
+# The above copyright notice and this permission notice shall be included
+# in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY
+# KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
+# WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+# NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+# LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+# OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+# WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+#
+
+Import qw( env );
+
+#
+#
+#
+$doc_tar_gz = "#build/dist/scons-doc-${\$env->{VERSION}}.tar.gz";
+
+#
+# We'll only try to build text files (for some documents)
+# if lynx is available to do the dump.
+#
+$groff = cons::whereis('groff');
+$lynx = cons::whereis('lynx');
+$man2html = cons::whereis('man2html');
+$jw = cons::whereis('jw');
+
+if ($jw) {
+    #
+    # Always create a version.sgml file containing the version information
+    # for this run.  Ignore it for dependency purposes so we don't
+    # rebuild all the docs every time just because the date changes.
+    #
+    $verfile = SourcePath("version.sgml");
+    unlink($verfile);
+    chmod(0664, $verfile);
+    open(FILE, ">$verfile") || die "Cannot open '$verfile': $!";
+    print FILE <<_EOF_;
+<!--
+THIS IS AN AUTOMATICALLY-GENERATED FILE.  DO NOT EDIT.
+-->
+<!ENTITY builddate "${\$env->{DATE}}">
+<!ENTITY buildversion "${\$env->{VERSION}}">
+<!ENTITY buildrevision "${\$env->{REVISION}}">
+_EOF_
+    close(FILE);
+
+    Ignore("version.sgml");
+
+    #
+    # Each document will live in its own subdirectory.  List them here
+    # as hash keys, with a hash of the info to control its build.
+    #
+    %doc_dirs = (
+        'design' => {
+                'html'	=> 'book1.html',
+    	},
+        'user' => {
+                'html'	=> 'book1.html',
+  	},
+    );
+
+	# Find internal dependencies in .sgml files:
+	#
+	#	<!entity bground SYSTEM "bground.sgml">
+	#	<graphic fileref="file.jpg">
+	#
+	# This only finds one per line, and assumes that anything
+	# defined as a SYSTEM entity is, in fact, a file included
+	# somewhere in the document.
+	sub scansgml {
+    	my @includes = ();
+    	do {
+		if (/<!entity\s+(?:%\s+)?(?:\S+)\s+SYSTEM\s+"([^"]*)">/i) {
+		    push(@includes, $1);
+	  	} elsif (/<graphic[^>]*\sfileref="([^"]*)"/) {
+		    push(@includes, "design/$1");
+		}
+	    } while (<scan::quickscan::SCAN>);
+	    @includes;
+	}
+
+	#
+	# We have to tell Cons to QuickScan the top-level SGML files which
+	# get included by the document SGML files in the subdirectories.
+	#	
+	@included_sgml = qw(
+		scons.mod
+		copyright.sgml
+	);
+
+	foreach $sgml (@included_sgml) {
+		$env->QuickScan(\&scansgml, $sgml);
+	}
+
+	#
+	# For each document, build the document itself in HTML, Postscript,
+	# and PDF formats.
+	#
+	foreach $doc (keys %doc_dirs) {
+		my $main = "$doc/main.sgml";
+		my $out = "main.out";
+
+		my $htmldir = "HTML/scons-$doc";
+		my $html = "$htmldir/" . $doc_dirs{$doc}->{'html'};
+		my $ps = "PS/scons-$doc.ps";
+		my $pdf = "PDF/scons-$doc.pdf";
+		my $text = "TEXT/scons-$doc.txt";
+
+		$env->QuickScan(\&scansgml, $main);
+
+		$env->Command($html, $main,
+		qq(rm -f %>:d/*.html
+		   jw -b html -o %>:d %<
+		   mv -v %>:d/index.html %> || true
+		));
+
+		$env->Command($ps, $main,
+		qq(rm -f %>:d/$out
+		   jw -b ps -o %>:d %<
+		   mv %>:d/main.ps %>
+		   rm -f %>:d/$out
+		));
+
+		$env->Command($pdf, $main,
+		qq(rm -f %>:d/$out
+		   jw -b pdf -o %>:d %<
+		   mv %>:d/main.pdf %>
+		   rm -f %>:d/$out
+		));
+
+		if ($doc_dirs{$doc}->{'text'} && $lynx) {
+		$env->Command($text, $html, qq(lynx -dump %<:a > %>));
+		}
+
+		push(@tar_deps, $html, $ps, $pdf);
+		push(@tar_list, $htmldir, $ps, $pdf);
+	}
+}
+
+#
+# Man page(s), in good ol' troff format.
+#
+my $scons_1 = "man/scons.1";
+
+if ($groff) {
+    my $ps = "PS/scons-man.ps";
+    my $text = "TEXT/scons-man.txt";
+
+    $env->Command($ps, $scons_1, "groff -man -Tps %< > %>");
+
+    $env->Command($text, $scons_1, "groff -man -Tascii %< > %>");
+
+    push(@tar_deps, $ps, $text);
+    push(@tar_list, $ps, $text);
+}
+
+if ($man2html) {
+    my $html = "HTML/scons-man.html";
+
+    $env->Command($html, $scons_1, "man2html %< > %>");
+
+    push(@tar_deps, $html);
+    push(@tar_list, $html);
+}
+
+#
+# Now actually create the tar file of the documentation,
+# for easy distribution to the web site.
+#
+$env->Command($doc_tar_gz,
+	      @tar_deps,
+	      qq(tar zchv -f %> -C build/doc @tar_list));

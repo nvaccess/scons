@@ -1,0 +1,197 @@
+# __COPYRIGHT__
+# __FILE__ __REVISION__ __DATE__ __DEVELOPER__
+
+
+                 SCons - a software construction tool
+
+                            Release Notes
+
+
+This is a beta release of SCons, a tool for building software (and other
+files).  SCons is implemented in Python, and its "configuration files"
+are actually Python scripts, allowing you to use the full power of a
+real scripting language to solve build problems.  You do not, however,
+need to know Python to use SCons effectively.
+
+So that everyone using SCons can help each other learn how to use it
+more effectively, please sign up for the scons-users mailing list at:
+
+    http://lists.sourceforge.net/lists/listinfo/scons-users
+
+
+
+RELEASE X.XX - XXX, XX XXX XXXX XX:XX:XX XXXXX
+
+  This is the third beta release of SCons.  Please consult the
+  CHANGES.txt file for a list of specific changes since last release.
+
+  Please note the following important changes since release 0.91:
+
+  Please note the following important changes since release 0.90:
+
+  - The spelling of the 'validater' keyword argument to the
+    Options.Add() method has been corrected to 'validator'.  The old
+    spelling still works but has been deprecated and generates a
+    warning.
+
+  - The SConscript() function no longer splits its first argument on
+    white space into a list of SConscript file names.  You must now
+    explicitly enclose the file names in a list:
+
+        SConscript(['sub1/SConscript', 'sub2/SConscript'])
+
+    Or use the Split() function (or something similar) to create a list:
+
+        SConscript(Split('sub1/SConscript sub2/SConscript'))
+
+    This makes the SConscript() function's handling of file names
+    consistent with the rest of SCons.
+
+  SCons is developed with an extensive regression test suite, and a
+  rigorous development methodology for continually improving that suite.
+  Because of this, SCons is of sufficient quality that you can use it
+  for real work.  The "beta" status of the release reflects that we
+  still may change interfaces in future releases, which may require
+  modifications to your SConscript files.  We strive to hold these
+  changes to a minimum.
+
+  Nevertheless, please heed the following disclaimers:
+
+    - Please report any bugs or other problems that you find to our bug
+      tracker at our SourceForge project page:
+
+      http://sourceforge.net/tracker/?func=add&group_id=30337&atid=398971
+
+      We have a reliable bug-fixing methodology already in place and
+      strive to respond to problems relatively quickly.
+
+    - Documentation is spottier than we'd like.  You may need to dive
+      into the source code to figure out how to do something.  Asking
+      questions on the scons-users mailing list is also welcome.  We
+      will be addressing the documentation in upcoming releases, but
+      would be more than glad to have your assistance in correcting this
+      problem... :-)
+
+      In particular, the "SCons Design" documentation on the SCons web
+      site is currently out of date, as we made significant changes to
+      portions of the interface as we figured out what worked and what
+      didn't during implementation.
+
+    - There may be performance issues.  Improving SCons performance
+      is an ongoing priority.  If you still find the performance
+      unacceptable, we would very much like to hear from you and learn
+      more about your configuration so we can optimize the right things.
+
+    - Error messages don't always exist where they'd be helpful.
+      Please let us know about any errors you ran into that would
+      have benefitted from a (more) descriptive message.
+
+  KNOWN PROBLEMS IN THIS RELEASE:
+
+    For a complete list of known problems, consult the SCons bug tracker
+    page at SourceForge:
+
+        http://sourceforge.net/tracker/?atid=398971&group_id=30337&func=browse
+
+    - Support for parallel builds (-j) does not work on WIN32 systems
+      prior to *official* Python release 2.2 (not 2.2 pre-releases).
+
+      Prior to Python 2.2, there is a bug in Python's Win32
+      implementation such that when a thread spawns an external command,
+      it blocks all threads from running.  This breaks the SCons
+      multithreading architecture used to support -j builds.
+
+      We have included a patch file, os_spawnv_fix.diff, that you can
+      use if you you want to fix your version of Python to support
+      parallel builds in SCons.
+
+    - Again, the "SCons Design" documentation on the SCons web
+      site is currently out of date.  Take what you read there with a
+      grain of salt.
+
+    - If a file is specified to be built in multiple ways, the last
+      processed builder specification overwrites all other builders,
+      without any warning.
+
+    - On Win32 systems, you must put a space between the redirection
+      characters < and >, and the specified files (or construction
+      variable expansions):
+
+        command < $SOURCE > $TARGET
+
+      If you don't supply a space (for example, "<$SOURCE"), SCons will
+      not recognize the redirection.
+
+    - People have reported problems with SCons not stopping a build when
+      an interrupt (CTRL+C) is received.  A fix was checked in to 0.11
+      that should fix this behavior on many systems, but there are
+      issues with the underlying Python os.system() call that suggest
+      this fix does not work on all systems or in all circumstances.
+      We're working to try to find a universal solution.
+
+    - Modifying a construction environment in a subsidiary SConscript
+      file modifies the global environment.
+
+    - MSVC .res files are not rebuilt when icons change.
+
+    - The -c option does not clean up .sconsign files or directories
+      created as part of the build, and also does not clean up
+      SideEffect files (for example, Visual Studio .pdb files).
+
+    - Switching content signatures from "MD5" to "timestamp" and back
+      again can cause unusual errors.  These errors can be cleared up by
+      removing all .sconsign files.
+
+    - On Win32, SCons does not recognize that a target specified as
+      (for example) \some\target is the same as X:\some\target (for your
+      current volume X:).
+
+    - Using a construction variable in its own expansion can cause
+      an infinite loop.
+
+    - Appending values to construction variables may suffer from type
+      errors if, for example, you try to append a string to list or
+      vice versa.
+
+    - When using multiple Repositories, changing the name of an include
+      file can cause an old version of the file to be used.
+
+    - There is currently no way to force use of a relative path (../*)
+      for directories outside the top-level SConstruct file.
+
+    - The Jar() Builder will, on its second or subsequent invocation,
+      package up the .sconsign files that SCons uses to track
+      signatures.
+
+    - SCons does not currently have a way to detect that an intermediate
+      file has been corrupted from outside and should be rebuilt.
+
+    - Unicode characters in path names do not work in all circumstances.
+
+    - A stray source file in a BuildDir can prevent targets from being
+      (re)built when they should.
+
+    - No support yet for the following planned command-line options:
+
+         -d -e -l --list-actions --list-derived --list-where
+         -o --override -p -r -R -w --write-filenames
+         -W --warn-undefined-variables
+
+
+
+Thank you for your interest, and please let us know how we can help
+improve SCons for your needs.
+
+Steven Knight
+knight at baldmt dot com
+http://www.baldmt.com/~knight/
+
+With plenty of help from the SCons Development team:
+        Chad Austin
+        Charles Crain
+        Steve Leblanc
+        Gary Oberbrunner
+        Anthony Roach
+        Greg Spencer
+        Christoph Wiedemann
+

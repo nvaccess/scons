@@ -1,0 +1,122 @@
+# Copyright (c) 2001 Steven Knight
+# __FILE__ __REVISION__ __DATE__ __DEVELOPER__
+
+
+                 SCons - a software construction tool
+
+                            Change Log
+
+
+
+RELEASE 0.03 - 
+
+  From Charles Crain:
+
+  - Performance improvements in the Node.FS and Sig.Calculator classes.
+
+  From Steven Knight:
+
+  - Search both /usr/lib and /usr/local/lib for scons directories by
+    adding them both to sys.path, with whichever is in sys.prefix first.
+
+  - Fix interpreting strings of multiple white-space separated file names
+    as separate file names, allowing prefixes and suffixes to be appended
+    to each individually.
+
+  - Refactor to move CompositeBuilder initialization logic from the
+    factory wrapper to the __init__() method.
+
+  From Anthony Roach:
+
+  - Add a "duplicate" keyword argument to BuildDir() that can be set
+    to prevent linking/copying source files into build directories.
+
+  - Add a "--debug=tree" option to print an ASCII dependency tree.
+
+  - Fetch the location of the Microsoft Visual C++ compiler(s) from
+    the Registry, instead of hard-coding the location.
+    
+  - Made Scanner objects take Nodes, not path names.
+    
+  - Have the C Scanner cache the #include file names instead of
+    (re-)scanning the file each time it's called.
+
+  - Created a separate class for parent "nodes" of file system roots,
+    eliminating the need for separate is-parent-null checks everywhere.
+    
+  - Removed defined __hash__() and __cmp() methods from FS.Entry, in
+    favor of Python's more efficient built-in identity comparisons.
+
+
+
+RELEASE 0.02 - Sun, 23 Dec 2001 19:05:09 -0600
+
+  From Charles Crain:
+
+  - Added the Install(), BuildDir(), and Export() methods.
+
+  - Fix the -C option by delaying setting the top of the FS tree.
+
+  - Avoid putting the directory path on the libraries in the LIBS
+    construction variable.
+
+  - Added a GetBuildPath() method to return the full path to the
+    Node for a specified string.
+
+  - Fixed variable substitution in CPPPATH and LIBPATH.
+
+  From Steven Knight:
+
+  - Fixed the version comment in the scons.bat (the UNIX geek used
+    # instead of @rem).
+
+  - Fix to setup.py so it doesn't require a sys.argv[1] argument.
+
+  - Provide make-like warning message for "command not found" and
+    similar errors.
+
+  - Added an EXAMPLES section to the man page.
+
+  - Make Default() targets properly relative to their SConscript
+    file's subdirectory.
+
+  From Anthony Roach:
+
+  - Documented CXXFLAGS, CXXCOM, and CPPPATH.
+
+  - Fixed SCONS_LIB_DIR to work as documented.
+
+  - Made Default() accept Nodes as arguments.
+
+  - Changed Export() to make it easier to use.
+  
+  - Added the Import() and Return() methods.
+
+
+
+RELEASE 0.01 - Thu Dec 13 19:25:23 CST 2001
+
+A brief overview of important functionality available in release 0.01:
+
+  - C and C++ compilation on POSIX and Windows NT.
+
+  - Automatic scanning of C/C++ source files for #include dependencies.
+
+  - Support for building libraries; setting construction variables
+    allows creation of shared libraries.
+
+  - Library and C preprocessor search paths.
+
+  - File changes detected using MD5 signatures.
+
+  - User-definable Builder objects for building files.
+
+  - User-definable Scanner objects for scanning for dependencies.
+
+  - Parallel build (-j) support.
+
+  - Dependency cycles detected.
+
+  - Linux packages available in RPM and Debian format.
+
+  - Windows installer available.
