@@ -1,0 +1,4 @@
+changeset 6cd6aa638462954d8ae7f6c72a8598cf15c802fb
+manifest 7c60ab3a6c16778db3def191a24c73e6b3d5063a
+extra convert_revision:svn:9d021b7c-245b-480b-aee3-a733790e49d1/trunk@756
+files test/gnutools.py

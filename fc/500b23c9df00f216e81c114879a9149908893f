@@ -1,0 +1,4 @@
+changeset d983f0c80068aeb085f79e9e5cdddc6e6681adba
+manifest d1778d87b513d4ed641465f43e4d77b25a1722d6
+extra amend_source:b34bd95b825af4c6c57ac844f27e132712ff1c55
+files QMTest/TestSCons.py

@@ -1,0 +1,4 @@
+changeset 44b2ef8cfb919b8c264189e1df84397c38da1eac
+manifest d734283fb966f67d5a93c3329e671896936460c7
+extra convert_revision:svn:9d021b7c-245b-480b-aee3-a733790e49d1/trunk@4182
+files test/import.py

@@ -1,0 +1,4 @@
+changeset dfc9c9b4fd9d02b733624c40a132d66437c3fadd
+manifest 612e3c84bb06e2daf3e8c0aa7162d71c5a0c5c63
+extra convert_revision:svn:9d021b7c-245b-480b-aee3-a733790e49d1/trunk@148
+files debian/rules

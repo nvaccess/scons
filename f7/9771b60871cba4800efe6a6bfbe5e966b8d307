@@ -1,0 +1,4 @@
+changeset 488a9ee2ee11dbc46f08312d5ef4c05eeac5d29e
+manifest 86e52913abaa9f6e6c6f404aa259bc8a68421cdf
+extra convert_revision:svn:9d021b7c-245b-480b-aee3-a733790e49d1/trunk@60
+files test/errors.py

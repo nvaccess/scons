@@ -1,0 +1,4 @@
+changeset c16a52a5c4cb640027c9e93c24161964be2a903a
+manifest e94cb2ecc78c012b7dbb527a3df054783a9bb308
+extra convert_revision:svn:9d021b7c-245b-480b-aee3-a733790e49d1/trunk@4081
+files src/engine/SCons/Tool/swig.xml

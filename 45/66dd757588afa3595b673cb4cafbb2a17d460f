@@ -1,0 +1,4 @@
+changeset c57cb0965aaf351cb4b7b2a9a05e0107991a4fab
+manifest 9005c2f2f511fec0003f6474e28684efdca03107
+author Mattias@WinDev
+files src/engine/SCons/Tool/intelc.py

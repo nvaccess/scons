@@ -1,0 +1,4 @@
+changeset d4e1c1832477d2b7684cb6f4147b0c76e2c10441
+manifest ea57cd5a9cd03522e6fa70b8970f74e205ab9a13
+author Andrew Featherstone <andrew.featherstone@cantab.net
+files src/engine/SCons/Tool/swig.xml

@@ -1,0 +1,3 @@
+changeset 8ef14fc8277870c52d5720f8adeea43b7a757679
+manifest 607c48267e4cdcb5321dc97c592fb974d5be1bc0
+files src/engine/SCons/Tool/intelc.py

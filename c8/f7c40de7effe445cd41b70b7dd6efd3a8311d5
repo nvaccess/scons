@@ -1,0 +1,3 @@
+changeset 291bd30afd1281a4dca7ae6c076282a74f774d3c
+manifest dd0fd1dbea27bade949e0a8a65dd5c35a175fbcb
+files src/engine/SCons/Tool/textfile.xml

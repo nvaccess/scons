@@ -1,0 +1,4 @@
+changeset 09e1309494f5dcbad4195df86dbbcdcc42ff289e
+manifest e838d0ad3b1a3b069e882378389cff1a5773fa43
+extra convert_revision:svn:9d021b7c-245b-480b-aee3-a733790e49d1/trunk@3595
+files src/engine/SCons/Tool/tex.py

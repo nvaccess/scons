@@ -1,0 +1,4 @@
+changeset 86caa35b9f3c4ba6a4e14b1fbbb6712a55368f26
+manifest aa53791d5e1c62b5f050773d2468d405735c12a4
+extra branch:optimize-scan-path-subst-v2
+files src/engine/SCons/Node/__init__.py

@@ -1,0 +1,4 @@
+changeset ceca58744482eee0815784e94c994435d62bb022
+manifest 2e23ae90ab276acbcab93fea6c0412a809b8586b
+extra convert_revision:svn:9d021b7c-245b-480b-aee3-a733790e49d1/trunk@3379
+files src/engine/SCons/Tool/msvc.py

@@ -1,0 +1,4 @@
+changeset 6537a0b752e0fe670e16f253e29123bcfd8f6599
+manifest d0a67ddd3bef33671ebb0eb1a7de8f6856ecae22
+extra convert_revision:svn:9d021b7c-245b-480b-aee3-a733790e49d1/trunk@4862
+files src/engine/SCons/PathList.py

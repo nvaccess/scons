@@ -1,0 +1,4 @@
+changeset ca4e4fb1584570f5e6a1b9bd997d3422c24fd896
+manifest 956d98dcb99485f083d38e3377b4f39b39720d55
+extra convert_revision:svn:9d021b7c-245b-480b-aee3-a733790e49d1/trunk@4084
+files src/engine/SCons/Tool/swig.py

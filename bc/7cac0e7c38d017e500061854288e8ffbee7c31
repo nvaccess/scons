@@ -1,0 +1,4 @@
+changeset f734c378959b7130868982fd85490739cd03dbc1
+manifest 28ec6aa5e325e94038d5fdf4c41511b008b91e1d
+extra convert_revision:svn:9d021b7c-245b-480b-aee3-a733790e49d1/trunk@3978
+files test/option/debug-memoizer.py

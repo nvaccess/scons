@@ -1,0 +1,4 @@
+changeset 12b627070dadfece27075af7bf97955fee9e6cc7
+manifest be413b1b7cc27bbc521d390f3a91f3cc21e71f74
+extra convert_revision:svn:9d021b7c-245b-480b-aee3-a733790e49d1/trunk@974
+files test/CacheDir.py

@@ -1,0 +1,4 @@
+changeset 2f7e4f3677a761ea34e571dcc7588ecb024c3bf6
+manifest 63308ec77d3e46ca828b636adb490a98a2e2dc4c
+extra convert_revision:svn:9d021b7c-245b-480b-aee3-a733790e49d1/trunk@4201
+files test/SConscriptChdir.py

@@ -1,0 +1,4 @@
+changeset b28aa84cbf611281028ab847eb117425780eaf14
+manifest 4a78734586fac1202c34f591dd6ddd1afb0109ae
+extra convert_revision:svn:9d021b7c-245b-480b-aee3-a733790e49d1/trunk@4354
+files src/engine/SCons/Util.py

@@ -1,0 +1,4 @@
+changeset d7af1ce8240816d8e4476b64d10de4d66cc90e77
+manifest d6d0ba66952e235c15ad7408a467821b40702ad9
+extra convert_revision:svn:9d021b7c-245b-480b-aee3-a733790e49d1/trunk@3772
+files src/engine/SCons/Node/FS.py

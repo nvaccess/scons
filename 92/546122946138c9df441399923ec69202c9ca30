@@ -1,0 +1,4 @@
+changeset 07bc78186bc9a63b50eca78c39964033b5432d76
+manifest 6ef2aee8c4f3557d8a247e6a9bdebd980cc982de
+extra convert_revision:svn:9d021b7c-245b-480b-aee3-a733790e49d1/trunk@3332
+files src/engine/SCons/SConfTests.py

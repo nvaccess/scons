@@ -1,0 +1,4 @@
+changeset 1b013aa33008aab71c613b319677373fca456c30
+manifest a811c9e617c59d0c6ebf10fe0825e26618600267
+extra convert_revision:svn:9d021b7c-245b-480b-aee3-a733790e49d1/trunk@3779
+files src/engine/SCons/SubstTests.py

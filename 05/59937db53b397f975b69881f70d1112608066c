@@ -1,0 +1,4 @@
+changeset c12e75be52fd953bc916a47b1b5676c8aa7785bf
+manifest 40ee7e0ea12f595dcc7458629d397f97500073b3
+extra branch:python3-port
+files src/engine/SCons/Script/__init__.py

@@ -1,0 +1,5 @@
+changeset de552a308cc740f1fd0a49c14ad7910bd09674ee
+manifest c88755a1fffe15095e11fe18a316e6be2f2d0fa6
+author Bill@mediadog7-2
+extra branch:python3-port
+files test/MSVS/vs-10.0-exec.py

@@ -1,0 +1,5 @@
+changeset a18abeb1efc79cb703b4a0e551200396d3c5d626
+manifest 6d74c4a3eb7b0e31f94e6dba03997f0420c73896
+author Bill@mediadog7-2
+extra branch:python3-port
+files test/Win32/mingw.py

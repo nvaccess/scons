@@ -1,0 +1,4 @@
+changeset e9fa483b62b628e24e1705bb7158a0e6ada3664f
+manifest 7e912d3aa22b0d4949c82bc2bb49c2a6ceeeb81b
+extra convert_revision:svn:9d021b7c-245b-480b-aee3-a733790e49d1/trunk@4121
+files src/engine/SCons/Tool/textfile.py

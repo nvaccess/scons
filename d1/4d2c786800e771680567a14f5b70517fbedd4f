@@ -1,0 +1,4 @@
+changeset cc90616480e88b317994674bf1908b260514d8e5
+manifest 83d709f25ee9a472cc149da14778acfc05c92fb7
+extra convert_revision:svn:9d021b7c-245b-480b-aee3-a733790e49d1/trunk@5250
+files test/MSVS/CPPPATH-Dirs.py

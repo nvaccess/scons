@@ -1,0 +1,4 @@
+changeset 2ce121a30a19cc5e2218f97a2a036dee4cb2945a
+manifest 397a16b6a84f9a8b8ecd235a7b0fb96c035a8958
+extra convert_revision:svn:9d021b7c-245b-480b-aee3-a733790e49d1/trunk@604
+files src/engine/SCons/Tool/masm.py

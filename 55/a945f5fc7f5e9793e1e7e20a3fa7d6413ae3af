@@ -1,0 +1,3 @@
+changeset 802b1c6fd632a35cf1496b886507f36ae55803ba
+manifest 095442d6244854a45f9bcf953b27ebf3bf6eadc3
+files src/engine/SCons/SConf.py

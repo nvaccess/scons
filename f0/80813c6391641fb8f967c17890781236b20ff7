@@ -1,0 +1,4 @@
+changeset d06c22bbe845e6d74972bb0235c4288b922f9df4
+manifest 4469fc70e011bd96bdb570da368e1d0df4baa822
+extra histedit_source:9421c945e2fd687d656e06a823c1c47f1b2d1c79
+files test/SWIG/SWIG.py

@@ -1,0 +1,3 @@
+changeset b5ebd562ddc110aa4745863b5182f555b08bdddd
+manifest cc1efddfa36217f40212ac0212e4c7b5a69374ac
+files src/engine/SCons/Tool/swig.py

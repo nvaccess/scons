@@ -1,0 +1,3 @@
+changeset b8e7614a7a9240fb15e87b0a9e7f04a9056240df
+manifest 7f55ddc631281d101c0ba137079891f5f5eb79f7
+files src/engine/SCons/Tool/msvs.xml

@@ -1,0 +1,4 @@
+changeset 48c8f416218307f819e4950990403c0b7af6697a
+manifest 884ea23fd6fcfa8d7d39cf41e964c7abb0c3e554
+extra convert_revision:svn:9d021b7c-245b-480b-aee3-a733790e49d1/trunk@5190
+files src/engine/SCons/Tool/intelc.py

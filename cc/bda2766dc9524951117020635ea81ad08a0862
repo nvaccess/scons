@@ -1,0 +1,4 @@
+changeset c4556c966439424c0dfa480f7d5632caf3ba1e58
+manifest 22e2fa111e25b70579c03739f2fc1f69195e54e4
+extra branch:msvs-vcvars-caching
+files src/engine/SCons/Tool/MSCommon/vc.py

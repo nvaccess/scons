@@ -1,0 +1,4 @@
+changeset 13b1a78d4ab8a40b151cbb9d8d6130cc34c79d9c
+manifest 3ace4d9c2b6f21338919af71257a83181fa91706
+extra convert_revision:svn:9d021b7c-245b-480b-aee3-a733790e49d1/trunk@4087
+files src/engine/SCons/Environment.py

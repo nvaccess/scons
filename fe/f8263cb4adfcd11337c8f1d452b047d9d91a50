@@ -1,0 +1,4 @@
+changeset 78f15a78482da06d6b5f33d420ad151274a854ed
+manifest 2cbf5d09df7ef934e057a15c09e0f82fb1daa695
+extra convert_revision:svn:9d021b7c-245b-480b-aee3-a733790e49d1/trunk@3860
+files QMTest/TestCommon.py

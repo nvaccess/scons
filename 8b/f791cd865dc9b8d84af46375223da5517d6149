@@ -1,0 +1,4 @@
+changeset b2e8353588d8daf422d07f99164cffef60f56bfe
+manifest 1af9b000cffe06261ba16af00afbb33d5fb13cdc
+extra convert_revision:svn:9d021b7c-245b-480b-aee3-a733790e49d1/trunk@3276
+files test/Rpcgen/RPCGEN.py

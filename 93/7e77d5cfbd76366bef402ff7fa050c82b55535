@@ -1,0 +1,4 @@
+changeset f6bac1ae1c59299e87a2645ac27c420560dbc021
+manifest ecf84d0869bdd64115e0495093e0773704bac7d1
+extra branch:python3-port
+files src/engine/SCons/Util.py

@@ -1,0 +1,4 @@
+changeset bdd1307c30b33b8d8dd24d222b394d7cf98394f1
+manifest 24d487a1bb932c645b705d97aacd29e728cb185f
+extra convert_revision:svn:9d021b7c-245b-480b-aee3-a733790e49d1/trunk@3792
+files src/engine/SCons/Tool/__init__.xml

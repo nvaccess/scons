@@ -1,0 +1,3 @@
+changeset ad0f8952dda483c12559f7dacee4bba0f4cb4430
+manifest d133da14029b57eb3964a92f5c088f3e0536408e
+files src/engine/SCons/Tool/xgettext.py

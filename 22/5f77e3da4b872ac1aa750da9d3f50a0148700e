@@ -1,0 +1,3 @@
+changeset cc3cacf95588380fa5c9f48e252e46eac770d901
+manifest 1487744b4cb37c1cf0ce3cfd1b8a8703e93a785f
+files test/D/Issues/2944/D_changed_DFLAGS_not_rebuilding.py

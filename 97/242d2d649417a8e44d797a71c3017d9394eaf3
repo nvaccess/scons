@@ -1,0 +1,4 @@
+changeset 18e59838064492be4d8d4d41b57a5dee9f58b178
+manifest f63babef834977267b535a1ab0b7a1bed16f7c27
+extra convert_revision:svn:9d021b7c-245b-480b-aee3-a733790e49d1/trunk@5010
+files test/rebuild-generated.py

@@ -1,0 +1,3 @@
+changeset 745121b134b00fbff6304eb9a3db21291114f409
+manifest 5be0e3c92f9eea32dbf69447ecd70b81f55da96f
+files src/engine/SCons/Tool/GettextCommon.py

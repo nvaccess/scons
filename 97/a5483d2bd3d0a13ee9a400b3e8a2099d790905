@@ -1,0 +1,4 @@
+changeset 79cec9c5c0fb5813ff54b5804886131163d7ebe6
+manifest 70459647b121ee4e8ebea66133327f144565107b
+extra branch:msvs-express-2013
+files src/engine/SCons/Tool/MSCommon/vc.py

@@ -1,0 +1,4 @@
+changeset c838def53531a492ee6463fcd88a7cfa455c1036
+manifest 6e50cac8abace47176531f84e363738a143259d7
+extra convert_revision:svn:9d021b7c-245b-480b-aee3-a733790e49d1/trunk@4858
+files src/engine/SCons/SConsign.py

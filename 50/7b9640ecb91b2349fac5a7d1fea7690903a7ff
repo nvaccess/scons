@@ -1,0 +1,4 @@
+changeset 679f3aabc85d85ad39b5e9f27e1569a0607c4753
+manifest 43368ad4e4224ac5bbf3363f16ab62d2114bf5f9
+extra convert_revision:svn:9d021b7c-245b-480b-aee3-a733790e49d1/trunk@4539
+files QMTest/TestSCons.py

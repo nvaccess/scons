@@ -1,0 +1,4 @@
+changeset 70ef38f58f09e6c6d2afe10de50393734f013e78
+manifest fbcbded5c4d117a946efe9867882ba7a0c418578
+extra rebase_source:d859975b69803863bd76690387652ba1d7aa5b30
+files src/engine/SCons/Tool/ar.py

@@ -1,0 +1,4 @@
+changeset 4dfb9e15524e4f9ec843afd98973c488f4a6e388
+manifest 5addf77c13e33ea2a55a5e50e35ae87508c887e8
+extra convert_revision:svn:9d021b7c-245b-480b-aee3-a733790e49d1/trunk@5166
+files test/TEX/generated_files.py

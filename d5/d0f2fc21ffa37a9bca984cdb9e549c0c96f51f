@@ -1,0 +1,4 @@
+changeset f6663494f488cde720402117be939f9bacc8e1ba
+manifest ec8679f92cb63d31f4b3994e5503e7743eb71103
+extra rebase_source:1296abd3d7cba379f308dadfd9e4dba13a152019
+files src/engine/SCons/Defaults.py

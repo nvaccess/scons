@@ -1,0 +1,4 @@
+changeset 8a0abb86e91f4a3d9269551f17488bdb0ae32522
+manifest f61a71f4844be5334ee4a72d5e85ab83ac959007
+author Andrew Featherstone <andrew.featherstone@cantab.net
+files src/engine/SCons/Environment.py

@@ -1,0 +1,3 @@
+changeset aa13f076af6fa232f4e5f837bf80d35cf1e4ef06
+manifest 3919a20dbebafb184ec54ac4c6bccc230e95b215
+files src/engine/SCons/Tool/MSCommon/common.py

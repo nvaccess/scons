@@ -1,0 +1,4 @@
+changeset 9b6514e6d1b72a9c9774d460d6e9401114b9a8b9
+manifest 5a8d60c07d798a88632d2d4c07e67b33fbcfe5a0
+extra convert_revision:svn:9d021b7c-245b-480b-aee3-a733790e49d1/trunk@3434
+files src/engine/SCons/Tool/latex.py

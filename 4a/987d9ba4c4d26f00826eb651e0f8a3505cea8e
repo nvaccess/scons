@@ -1,0 +1,3 @@
+changeset 24fb80bf553da87db7845b00a9eaf8729758d4e6
+manifest f0a1034faea14f70ba9aa63f722546210e33bd89
+files src/engine/SCons/Platform/win32.py

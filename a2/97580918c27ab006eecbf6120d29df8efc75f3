@@ -1,0 +1,4 @@
+changeset 3c9afdfd0a15a09775cf23dd30bbe0fd8fbcd373
+manifest 982d3e28dff827b8d69d92b8473f2b5ed7d7eef9
+extra branch:python3-port
+files test/D/SharedObjects/Common/common.py

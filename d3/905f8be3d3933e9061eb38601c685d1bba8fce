@@ -1,0 +1,4 @@
+changeset ac242324dca3b64a6d38a6fea9d0a0793312bbee
+manifest 23e2087d50b427290b477cea75520b6a7cd0ad5d
+extra convert_revision:svn:9d021b7c-245b-480b-aee3-a733790e49d1/trunk@4005
+files test/Libs/LIBS-LIBPREFIX-exists.py

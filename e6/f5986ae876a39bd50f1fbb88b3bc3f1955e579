@@ -1,0 +1,4 @@
+changeset 16bc4ab40017990b22dc1baab972c6eae0335404
+manifest 9f368a30924bd948b0bf14614f7310c2446d6e49
+extra branch:python3-port
+files src/script/sconsign.py

@@ -1,0 +1,3 @@
+changeset ee99340e378f0e20e4b30734f6051227d3149b04
+manifest d0dfb3fe00bf09925671aaf7e0c8aed27df06dc0
+files src/engine/SCons/compat/__init__.py

@@ -1,0 +1,4 @@
+changeset 7de7528adb09273237734d288768f94afd9c720b
+manifest 1ae50cbf8f7696a5aaea2c01d265fee048cfe8fc
+extra convert_revision:svn:9d021b7c-245b-480b-aee3-a733790e49d1/trunk@3335
+files src/engine/SCons/Conftest.py

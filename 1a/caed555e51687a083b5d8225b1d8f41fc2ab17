@@ -1,0 +1,4 @@
+changeset 8022d6a63d05e0cb76a1ddfc8ea59e26717fa105
+manifest b821db60b2a3d32668e693ec20a494e18f5a410c
+extra convert_revision:svn:9d021b7c-245b-480b-aee3-a733790e49d1/trunk@3754
+files test/GetBuildFailures/serial.py

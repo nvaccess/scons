@@ -1,0 +1,3 @@
+changeset f90c47d61bea0e86ca2c4492e04bfbd0f820aecc
+manifest a6d7cc217ac725b2af6b15640cdf910ac6bd1dc3
+files src/engine/SCons/Node/Python.py

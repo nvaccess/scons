@@ -1,0 +1,4 @@
+changeset df225335f186daad55d7dd2a795182cb8e66d7d9
+manifest 29b13ec3f98c0e9a0aba0ced790b0dea7514e88d
+extra branch:python3-port
+files src/engine/SCons/Errors.py

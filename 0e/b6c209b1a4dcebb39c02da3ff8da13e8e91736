@@ -1,0 +1,4 @@
+changeset b77ab8fa66888e7c4a9d8a48d6b073966e2c0ac7
+manifest 7e177a01e2cef132a2e04b407c1bd1e2d71916f5
+extra convert_revision:svn:9d021b7c-245b-480b-aee3-a733790e49d1/trunk@3437
+files test/Glob/glob-libpath.py

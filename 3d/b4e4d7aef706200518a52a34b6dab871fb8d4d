@@ -1,0 +1,4 @@
+changeset d2eb095f1d62d2d6b6526a108624dcd9ad4c9afe
+manifest 0e8cc4fb9fc857f1e51337f7c002c18121940aaa
+extra branch:switch_to_slots
+files bootstrap.py

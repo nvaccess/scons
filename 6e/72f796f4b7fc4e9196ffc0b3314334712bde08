@@ -1,0 +1,4 @@
+changeset 953e3d82b804b4501884b67c1cae2542127b6a95
+manifest 15a0c454c518a156161b27fa9d82e088bb0f587a
+extra convert_revision:svn:9d021b7c-245b-480b-aee3-a733790e49d1/trunk@3916
+files test/MSVS/vs-8.0-variant_dir.py

@@ -1,0 +1,4 @@
+changeset 82d5dd94c9519ce7fe594dd1ec0319b989e30ef6
+manifest 913ffb079ab12189e346798c0dce6bf54b38a465
+extra convert_revision:svn:9d021b7c-245b-480b-aee3-a733790e49d1/trunk@4491
+files src/engine/SCons/Tool/msvsTests.py

@@ -1,0 +1,4 @@
+changeset fc95c3dfd2726a8ce5db23b20a91446f69de37af
+manifest 352c0af047383f4c75b2d6d9903178133f51abfd
+extra branch:fix_update_release_tests_2012_01
+files test/update-release-info/update-release-info.py

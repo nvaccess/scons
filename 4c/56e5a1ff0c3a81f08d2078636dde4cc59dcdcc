@@ -1,0 +1,4 @@
+changeset 9003ea22dcd2e9a31c7ad3dac62554606bfa8bc2
+manifest 9f3ed78f562e252770ccb883ace38dead566b3f8
+extra convert_revision:svn:9d021b7c-245b-480b-aee3-a733790e49d1/trunk@4875
+files src/engine/SCons/Tool/packaging/rpm.py

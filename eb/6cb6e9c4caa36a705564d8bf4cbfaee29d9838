@@ -1,0 +1,4 @@
+changeset ef36dfa9027b52f7d934217ec29f75aa58dd2267
+manifest 96cde14b1afe49a6bcd173ed09a26bf0afe9f778
+extra convert_revision:svn:9d021b7c-245b-480b-aee3-a733790e49d1/trunk@4038
+files src/engine/SCons/Tool/msvs.py

@@ -1,0 +1,4 @@
+changeset acd40f0e52bbfcbe61ed47fcf18cdfda8a83f682
+manifest b60e7251529425aa47d335eac96f5fbc940ffada
+extra amend_source:a0d23b8377f2c9e5e3572718f75f48f489c01740
+files src/engine/SCons/SConf.py

@@ -1,0 +1,4 @@
+changeset 2f49345f719ca16171a735cf22f0c899c6c6122a
+manifest 79af64990f281ebc0afa06d6a572fe1c9e9266e0
+extra histedit_source:0f3514bd194597ae4b8084fbbb722ad9fc02c7fc
+files src/engine/SCons/Tool/swig.py

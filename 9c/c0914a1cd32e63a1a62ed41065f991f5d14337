@@ -1,0 +1,3 @@
+changeset 8e3df13603c644b2a544c16a41c6bec18a8f6b9e
+manifest c359c8c9820ed37f2b9af85946ceeac84bd1c5ee
+files test/SConsignFile/use-dumbdbm.py

@@ -1,0 +1,3 @@
+changeset 4d884bda2c51c498bd6a379c0a303b00f04d6923
+manifest 5a3be617c21fd7812d6d4e7a22555500c98df5c2
+files src/engine/SCons/Node/FS.py
