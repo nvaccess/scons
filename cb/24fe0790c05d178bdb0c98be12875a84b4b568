@@ -1,0 +1,4 @@
+changeset a0bb1880425772b21422e3ece400a872c312c327
+manifest e1bcbdbff09843c8a8309047a1a81727bb0fcf43
+extra convert_revision:svn:9d021b7c-245b-480b-aee3-a733790e49d1/trunk@690
+files test/msvc.py

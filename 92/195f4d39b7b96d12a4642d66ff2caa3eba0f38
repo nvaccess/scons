@@ -1,0 +1,3 @@
+changeset 9551ecab94060457a126bf3be0a93f7d4ca4b59b
+manifest c5b3891795090fc465bcf1a4fc69c30c6116d0df
+files src/engine/SCons/Errors.py

@@ -1,0 +1,4 @@
+changeset 0a6c431afad981fa3b5b30ec58f3c83cd01d801c
+manifest 412bf949f1cd843cfe32621be25cc7a7811b1099
+extra convert_revision:svn:9d021b7c-245b-480b-aee3-a733790e49d1/trunk@617
+files src/engine/SCons/Node/FS/.aeignore

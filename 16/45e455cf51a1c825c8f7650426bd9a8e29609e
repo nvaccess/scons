@@ -1,0 +1,3 @@
+changeset 1fe327ab56b969800ef93e4d6e9ec93036e79d7d
+manifest d5837912f3578c2f2aa8de89ac24bbc34ec756a9
+files src/engine/SCons/Tool/rpmutils.py

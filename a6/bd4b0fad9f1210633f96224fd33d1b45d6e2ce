@@ -1,0 +1,4 @@
+changeset 38d4ee6ed72ab0626472cd5f732eb8623480443e
+manifest 06ce6ef626c81f280e017726e50f326749de426b
+extra convert_revision:svn:9d021b7c-245b-480b-aee3-a733790e49d1/trunk@5216
+files QMTest/TestCmd.py

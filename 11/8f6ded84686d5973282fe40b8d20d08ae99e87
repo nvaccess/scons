@@ -1,0 +1,4 @@
+changeset ac1d5ed9f08ce1868fe9fbaea4f5e2f4c87fa431
+manifest c0c53bec553d999e0930def512f8f5f0737dc004
+extra branch:python3-port
+files src/engine/SCons/Node/FS.py

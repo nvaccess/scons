@@ -1,0 +1,4 @@
+changeset aea12b7f5c14705f0f7550e30e3d23e2f8696bde
+manifest 0be27d49aa679af073cdf68bf8e21d0cfe51e951
+extra convert_revision:svn:9d021b7c-245b-480b-aee3-a733790e49d1/trunk@5238
+files src/script/scons.bat

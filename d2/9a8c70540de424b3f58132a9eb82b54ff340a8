@@ -1,0 +1,4 @@
+changeset 86cd47d4d39b9c23692e66ed529b771d0f2adc3e
+manifest fb4df9e6633f56adaa464e90eb581f15ecfab494
+extra convert_revision:svn:9d021b7c-245b-480b-aee3-a733790e49d1/trunk@1302
+files src/engine/SCons/Sig/MD5.py

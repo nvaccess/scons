@@ -1,0 +1,4 @@
+changeset 7b5f8cac5c209941058c0a30e33416f3094a3afa
+manifest bceeae546686e446317c4f9752e65abd370da7d8
+extra convert_revision:svn:9d021b7c-245b-480b-aee3-a733790e49d1/trunk@4195
+files src/test_strings.py

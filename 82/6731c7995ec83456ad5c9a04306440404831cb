@@ -1,0 +1,3 @@
+changeset d41d9d57cedb3487bf9baee17c7aa6ac23887bc1
+manifest b97c7f10bd62c6f983491d0465a33551bef2130c
+files test/MinGW/MinGWSharedLibrary.py

@@ -1,0 +1,4 @@
+changeset c31690faef270ebb9f3c85bb4675d5395a488c67
+manifest 4414d55eb0e1c6ad4aa167cb2633d540bf8a98e5
+extra convert_revision:svn:9d021b7c-245b-480b-aee3-a733790e49d1/trunk@3549
+files src/engine/SCons/Job.py

@@ -1,0 +1,4 @@
+changeset 0dd6d91f1119397ac0095f74563ff9873a70d149
+manifest e4f69b2e149800709d342ede4a07fe17466d9d5e
+extra convert_revision:svn:9d021b7c-245b-480b-aee3-a733790e49d1/trunk@4902
+files bin/install_scons.py

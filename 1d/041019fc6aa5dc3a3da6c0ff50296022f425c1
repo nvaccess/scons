@@ -1,0 +1,4 @@
+changeset b19c902d8e4c0431feeda329218f21fbae5c394a
+manifest dadb47fd581062676b71e65e256a78e58d4575d2
+extra convert_revision:svn:9d021b7c-245b-480b-aee3-a733790e49d1/trunk@3569
+files test/runtest/fallback.py

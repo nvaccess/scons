@@ -1,0 +1,3 @@
+changeset 2d9a0d8007e8a2270186a257941453a883b743e7
+manifest 130a8d8ee58056ca20eb7f0b267053306686180e
+files src/engine/SCons/Node/__init__.py

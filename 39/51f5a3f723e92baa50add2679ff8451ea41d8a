@@ -1,0 +1,3 @@
+changeset 95054aeee4089f315281aeb54fbaab2367c9d0db
+manifest 590ff1e3f41634983286c1acf5de7899e7c16eae
+files src/engine/SCons/Tool/MSCommon/vc.py

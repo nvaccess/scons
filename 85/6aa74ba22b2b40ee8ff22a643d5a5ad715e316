@@ -1,0 +1,3 @@
+changeset 51cae721bae339cc115ccc3d47c04c9e1363e62c
+manifest 7f7cc7d7e01267db8f4cae82e5bae0ffa339b2de
+files src/engine/SCons/Variables/VariablesTests.py

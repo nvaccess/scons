@@ -1,0 +1,4 @@
+changeset 5eacd273f4c5756f6b79bac2cdfdee299f41f10f
+manifest cc653ccd6068931dfe70deb808dc720ceee6503c
+extra convert_revision:svn:9d021b7c-245b-480b-aee3-a733790e49d1/trunk@1180
+files test/pre-post-actions.py

@@ -1,0 +1,3 @@
+changeset a5451d54b158a578dae37096ade03c300e93b54a
+manifest 56716e3ce4ac70054d98a7f7f589a052973f742d
+files src/engine/SCons/Tool/mingw.py

@@ -1,0 +1,4 @@
+changeset ebc3e963fb860188ceea00761832108d17d8f6d7
+manifest 2943ee9d4c70d19fba488da5028834d1c7c567f4
+extra convert_revision:svn:9d021b7c-245b-480b-aee3-a733790e49d1/trunk@5158
+files test/Decider/switch-rebuild.py

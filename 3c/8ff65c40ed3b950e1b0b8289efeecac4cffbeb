@@ -1,0 +1,4 @@
+changeset 76ffb44229a4499454647ab54355c62ecb78d577
+manifest b0a94720121e324226123485e1b4fd129ea90c81
+extra convert_revision:svn:9d021b7c-245b-480b-aee3-a733790e49d1/trunk@1394
+files test/BuildDir/guess-subdir.py

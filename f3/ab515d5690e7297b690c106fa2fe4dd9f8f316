@@ -1,0 +1,4 @@
+changeset 110991ba1eaec6a7bca08f9a87816d71ceee2325
+manifest 9d168c708f2e2b6f09205655c64c38d6786b5309
+extra convert_revision:svn:9d021b7c-245b-480b-aee3-a733790e49d1/trunk@3481
+files src/engine/SCons/Scanner/RCTests.py

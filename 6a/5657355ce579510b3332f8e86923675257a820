@@ -1,0 +1,4 @@
+changeset 30f9c768113f3f1c0446dd6b97e52f21a6e57ee1
+manifest d3fa9efb36c105da6f015c6d949affc77428f7dd
+extra convert_revision:svn:9d021b7c-245b-480b-aee3-a733790e49d1/trunk@3293
+files src/engine/SCons/Script/Main.py

@@ -1,0 +1,4 @@
+changeset 4cd93b26b8248f726b1a7984d7def1db0477faff
+manifest 099d6de2fa96bffef6126ce0cd1993829ed143aa
+extra convert_revision:svn:9d021b7c-245b-480b-aee3-a733790e49d1/trunk@3749
+files src/engine/SCons/Errors.py

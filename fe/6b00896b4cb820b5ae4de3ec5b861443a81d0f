@@ -1,0 +1,3 @@
+changeset a4ea3cc00c8bf2ffdb165bd25780665803254da2
+manifest 610e3726c2490160e80042764f2cb2bc60cafe04
+files test/packaging/use-builddir.py

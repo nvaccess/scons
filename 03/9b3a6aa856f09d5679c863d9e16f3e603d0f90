@@ -1,0 +1,3 @@
+changeset 00d8b440a7447fc6c4b97522e5311a61fbd27bf7
+manifest b08ded2cb5266c3daf52516afa8f91d2a0cdf104
+files src/engine/SCons/Tool/textfile.py

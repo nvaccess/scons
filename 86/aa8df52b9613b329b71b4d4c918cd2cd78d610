@@ -1,0 +1,4 @@
+changeset 97d86410605a9ca880fef486c0e4f5a933e451a8
+manifest 7e72d4cccbedbb0c0d2d68b49dbb2fc1dd6f1489
+extra convert_revision:svn:9d021b7c-245b-480b-aee3-a733790e49d1/trunk@4607
+files bin/sconsoutput.py

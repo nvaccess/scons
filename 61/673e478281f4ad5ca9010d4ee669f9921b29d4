@@ -1,0 +1,3 @@
+changeset f34900d9bfd84fd3c44ebe5763dfad0e8bb1e247
+manifest 12831b08dc82d9baa0855d61cd6a7bf151d213cc
+files src/engine/SCons/Tool/midl.py

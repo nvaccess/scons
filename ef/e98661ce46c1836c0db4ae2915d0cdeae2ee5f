@@ -1,0 +1,3 @@
+changeset cdf45e97026eefc6e09bd51332301118f580e450
+manifest c6ae9b1086058717c791dd90ff50fb9310b268da
+files src/engine/SCons/Tool/msvc.py

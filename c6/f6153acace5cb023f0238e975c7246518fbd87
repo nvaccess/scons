@@ -1,0 +1,3 @@
+changeset 5f4ab41f8721d925233dbee3a13b9a7a4466da18
+manifest 2e05854189a6465a3d0f9ba352158830edf1b02e
+files src/engine/SCons/Tool/DCommon.py

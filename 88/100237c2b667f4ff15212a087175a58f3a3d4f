@@ -1,0 +1,4 @@
+changeset 4886ce5c9c92c1c9e088240fb36b484138489fe2
+manifest 73837c65cc1dbd8c42240b840a5774b5bd3a2df2
+extra convert_revision:svn:9d021b7c-245b-480b-aee3-a733790e49d1/trunk@1037
+files src/engine/SCons/Platform/darwin.py

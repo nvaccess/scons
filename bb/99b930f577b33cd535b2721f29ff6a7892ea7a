@@ -1,0 +1,3 @@
+changeset ba870319b6eb2e532f7ba53a5c4df4bf849f4f10
+manifest 3ede1744a07fb3a418f66d17df35e2fc1ca403c7
+files src/engine/SCons/Tool/packaging/rpm.py

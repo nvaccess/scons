@@ -1,0 +1,4 @@
+changeset bcfed9d93cad56163e3f7ea44637b0584c1780d5
+manifest 09629f00ffaa6831edbd97cfb8a532bfd3d12a0f
+extra convert_revision:svn:9d021b7c-245b-480b-aee3-a733790e49d1/trunk@5237
+files src/setup.py

@@ -1,0 +1,4 @@
+changeset fecd6d574501fd614fe295c3dad82e2f47db3565
+manifest 54e1efc9990577cfa62fa759051a7ca9ecfb5a07
+extra convert_revision:svn:9d021b7c-245b-480b-aee3-a733790e49d1/trunk@3340
+files src/engine/SCons/Platform/posix.py

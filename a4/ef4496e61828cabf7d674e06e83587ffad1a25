@@ -1,0 +1,4 @@
+changeset 2698dba890497b4de949c6aec024bbf5db992bc0
+manifest 480bff07287ea3cf66e49b2ae9cf6c9a144af882
+extra convert_revision:svn:9d021b7c-245b-480b-aee3-a733790e49d1/trunk@3915
+files src/engine/SCons/Script/Interactive.py

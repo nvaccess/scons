@@ -1,0 +1,4 @@
+changeset c9401db0930cdc8bc262a03dc668550e6533484a
+manifest 378c8455e085f613b227bb8a0b08acc8a77709d6
+extra convert_revision:svn:9d021b7c-245b-480b-aee3-a733790e49d1/trunk@3457
+files src/engine/SCons/compat/builtins.py

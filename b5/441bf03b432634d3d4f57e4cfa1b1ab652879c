@@ -1,0 +1,4 @@
+changeset 871ff7d6f2d871c9d8125a76acb456bdbecf2b2d
+manifest ca0737c571dd26eb9a297745a806a75af31c9862
+extra branch:issue-2857
+files src/engine/SCons/Platform/win32.py

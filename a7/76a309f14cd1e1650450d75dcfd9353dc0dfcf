@@ -1,0 +1,4 @@
+changeset caf51aff613914f3f4336a19e134e8e5a6e5acf1
+manifest 832a188c302fa3fd0ebcf83ad5bc5549bbfbbdda
+extra branch:python3-port
+files src/engine/SCons/Tool/msvs.py

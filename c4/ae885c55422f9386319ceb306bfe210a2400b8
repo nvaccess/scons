@@ -1,0 +1,4 @@
+changeset f4c85fe99189aa83dd1d5bdfba09ca48e55e47de
+manifest 680001ae4f32b0f233db2187bc5d810f3666a066
+extra branch:python3-port
+files src/engine/SCons/Tool/__init__.py

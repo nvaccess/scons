@@ -1,0 +1,4 @@
+changeset 63ac5926362f6f2c6b6afbd0eeb1a04a91797c60
+manifest 34cbef268306d0a2e37e0c4d536aa1d3e45eb6dc
+extra convert_revision:svn:9d021b7c-245b-480b-aee3-a733790e49d1/trunk@4493
+files src/engine/SCons/Tool/MSCommon/vc.py

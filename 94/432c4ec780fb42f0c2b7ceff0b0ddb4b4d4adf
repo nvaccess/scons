@@ -1,0 +1,4 @@
+changeset ca69077e60e49285d91ad7b1bc3caf534be06aee
+manifest f9493b7dd508ed7d46b7cdc74c73701d70ff3217
+extra branch:python3-port
+files QMTest/TestCmd.py

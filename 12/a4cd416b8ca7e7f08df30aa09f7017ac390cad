@@ -1,0 +1,4 @@
+changeset 58fb32c84ba8782d2b5e6b53911cde21c4e2b9e0
+manifest e976aeddaf656361d1767d805670b97978a08950
+extra branch:python3-port
+files QMTest/TestSCons.py

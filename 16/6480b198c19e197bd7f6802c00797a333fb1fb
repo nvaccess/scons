@@ -1,0 +1,4 @@
+changeset 0aa40c31a596a1d20d32a1410ac27212b094e259
+manifest 3ecbb939a96c18b8d7173da1b84f2d44333d33f3
+extra convert_revision:svn:9d021b7c-245b-480b-aee3-a733790e49d1/trunk@4882
+files src/engine/SCons/Platform/win32.py

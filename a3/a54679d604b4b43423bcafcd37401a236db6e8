@@ -1,0 +1,4 @@
+changeset 38b0c56f96b6948dd07675d727e99728fb167238
+manifest 86635fdb1f366e2125e69d905ed48cad102253c1
+author philippe.coval@osg.samsung.com
+files src/engine/SCons/Tool/textfile.xml

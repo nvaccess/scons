@@ -1,0 +1,4 @@
+changeset 1152e273119f671c8cda43cde8a7ded43dc45273
+manifest c328a97194eebd430e1a147568429ae3c4b96cfc
+extra branch:conftest-messages
+files src/engine/SCons/Conftest.py

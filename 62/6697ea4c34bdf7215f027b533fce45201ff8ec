@@ -1,0 +1,4 @@
+changeset 924ea1d8dc52a8c9ac087d7dc323d120560f8e99
+manifest 1f6db5a6ec400471b984480e76dc005e4c291ed5
+extra convert_revision:svn:9d021b7c-245b-480b-aee3-a733790e49d1/trunk@331
+files src/engine/SCons/Defaults.py

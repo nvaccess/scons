@@ -1,0 +1,4 @@
+changeset ee8aee160e91ced69f2751fa4b987b2a845254ae
+manifest d99f3624f38a69e15063b702f608d14eba3ab9d6
+extra convert_revision:svn:9d021b7c-245b-480b-aee3-a733790e49d1/trunk@1393
+files src/engine/SCons/Scanner/LaTeX.py

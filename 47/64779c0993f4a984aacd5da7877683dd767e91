@@ -1,0 +1,4 @@
+changeset 74e3deb7749b33215ccd0b05419b731ce3f2464d
+manifest f1bcccbbaa4a8755616a89b8cd39e1bcdcfb5dc1
+extra branch:rel_2.5.0
+files src/setup.py

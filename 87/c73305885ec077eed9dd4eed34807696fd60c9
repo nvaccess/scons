@@ -1,0 +1,5 @@
+changeset c90b5abbdedcfefd138f6430bf42b8ee4ceaff06
+manifest fdd83efe4750cec6a3f60446a1184ea64b11faa6
+author Bill@mediadog7-2
+extra branch:python3-port
+files test/Win32/bad-drive.py

@@ -1,0 +1,3 @@
+changeset 3012bcba094b1deae1c1c668b2396d23b019cdb3
+manifest b5b35d2ccfb0ca6acef11bb906f58edd2ae826b2
+files src/engine/SCons/Tool/msvs.py

@@ -1,0 +1,4 @@
+changeset 61dbefa856a08f2579b80980415d71187a943d0b
+manifest f3ff312fa5ba5818c8cba972d3ae26e6d01f668a
+extra convert_revision:svn:9d021b7c-245b-480b-aee3-a733790e49d1/trunk@3711
+files src/engine/SCons/Tool/ifort.py

@@ -1,0 +1,4 @@
+changeset 672a2cc941c9e22f6d87dd1ef9768b1257f2ebb6
+manifest 537cc373b1f2a39ea08019d7e2e9ebff7df46bba
+extra convert_revision:svn:9d021b7c-245b-480b-aee3-a733790e49d1/trunk@3874
+files src/engine/SCons/Tool/ilink32.py

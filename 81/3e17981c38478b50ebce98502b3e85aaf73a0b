@@ -1,0 +1,4 @@
+changeset a882d48e440f18984381ab23b739186224116b01
+manifest d611d7ffb8af3692f8c60f509ab9f07546b5e4eb
+extra branch:issue-2857
+files test/Win32/file-is-type-not-func.py

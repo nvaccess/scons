@@ -1,0 +1,4 @@
+changeset 12d0b880e8fb3bb83e36baa18fbcb907cac2b84e
+manifest 71c758c8697e51f90a433a559cad46322f3e6ae7
+extra convert_revision:svn:9d021b7c-245b-480b-aee3-a733790e49d1/trunk@4866
+files src/engine/SCons/Tool/JavaCommon.py

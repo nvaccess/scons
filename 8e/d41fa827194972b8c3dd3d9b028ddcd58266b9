@@ -1,0 +1,4 @@
+changeset 764064edd50928451b451fa14e142ea1d68bb1bf
+manifest 9b48032ec173f1904abb51d7241a40e3b1927523
+extra branch:issue-2856
+files src/engine/SCons/Tool/mingw.py

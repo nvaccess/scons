@@ -1,0 +1,4 @@
+changeset 743760d727b9b1e268980033b18c29b5e7452759
+manifest 1597852ea385177447a29d255e24d7bb8509a667
+extra branch:switch_to_slots
+files src/engine/SCons/Node/FS.py

@@ -1,0 +1,4 @@
+changeset c236b6467f90ff2a8007f6b54ba18f3e68a342a8
+manifest 1835e2c7759c1035863efe58da8b3f9898565c1e
+extra convert_revision:svn:9d021b7c-245b-480b-aee3-a733790e49d1/trunk@3360
+files test/Configure/basic.py

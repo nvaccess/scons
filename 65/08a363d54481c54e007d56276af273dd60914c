@@ -1,0 +1,4 @@
+changeset f5cdd6c73599f2f30f8c08b2de84bd412646b33c
+manifest 2c1c1f0c99035acdab656c79fbc3ce3542764498
+extra branch:pchdll
+files test/MSVC/pch-basics.py

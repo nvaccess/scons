@@ -1,0 +1,4 @@
+changeset d69287ce1bbd8990409c7c2910bdf4c35942620d
+manifest ca9d62284c7964f43c268197680a7489f7f3d295
+extra convert_revision:svn:9d021b7c-245b-480b-aee3-a733790e49d1/trunk@865
+files src/engine/SCons/EnvironmentTests.py

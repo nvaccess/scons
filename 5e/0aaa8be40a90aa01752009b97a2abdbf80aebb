@@ -1,0 +1,4 @@
+changeset f95fada456d3286ac6c58a9f834d14c07a9a06c5
+manifest f43d9a660a5cf32ddf5235079503cddbcaa77338
+extra branch:python3-port
+files test/Clean/mkfifo.py

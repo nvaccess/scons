@@ -1,0 +1,4 @@
+changeset fa9de018a9eecf30b0682332f6cc6ccb7ccfa959
+manifest 35d19f6e7825b78bfa926dd9aa15809913aaf672
+extra convert_revision:svn:9d021b7c-245b-480b-aee3-a733790e49d1/trunk@4316
+files src/engine/SCons/Debug.py

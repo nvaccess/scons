@@ -1,0 +1,4 @@
+changeset 8a82892eaf26f89204f4d05fbf73b373ae9e7a83
+manifest e05a14a57e290d9ee10a16159ba0c229cfe5d7cc
+extra convert_revision:svn:9d021b7c-245b-480b-aee3-a733790e49d1/trunk@399
+files src/engine/SCons/Scanner/C.py

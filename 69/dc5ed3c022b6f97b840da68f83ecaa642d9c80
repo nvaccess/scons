@@ -1,0 +1,4 @@
+changeset 438d3d8ff6815b7e259ce34315412030b34d2efd
+manifest 3785eb3d365c3c017de13eda17fc78d1eb0aba0d
+extra convert_revision:svn:9d021b7c-245b-480b-aee3-a733790e49d1/trunk@4069
+files src/engine/SCons/Tool/packaging/msi.py

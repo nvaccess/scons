@@ -1,0 +1,4 @@
+changeset 6bad45bb88d412cb81e7da06b1702859f4127ed5
+manifest 2572ff54f4c1bf13f9f38a161f81a6ea4779db4d
+extra convert_revision:svn:9d021b7c-245b-480b-aee3-a733790e49d1/trunk@1263
+files test/emitter.py

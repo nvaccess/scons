@@ -1,0 +1,3 @@
+changeset 41ce117906f581a30d291adaa08b5293b5deb955
+manifest 678e9a6a08b9de661ce4f6b03934c03b9190d880
+files src/engine/SCons/Tool/msvsTests.py

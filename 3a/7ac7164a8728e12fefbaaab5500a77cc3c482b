@@ -1,0 +1,4 @@
+changeset d81518ea4c0a6a5dddecb3006a07e0e87a203ed0
+manifest 9265784713aa226c5d1a15d5f114034d41eafe2a
+extra convert_revision:svn:9d021b7c-245b-480b-aee3-a733790e49d1/trunk@3364
+files doc/man/scons.1

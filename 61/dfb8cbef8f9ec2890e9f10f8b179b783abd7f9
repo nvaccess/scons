@@ -1,0 +1,3 @@
+changeset 8cc1bcd1cbda2ea58ca8ca09bff0334833deba15
+manifest c724bbcc66e8a2ae315c7b9ed3880c3196c6bc84
+files src/engine/SCons/Tool/ldc.py
