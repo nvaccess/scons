@@ -1,0 +1,75 @@
+# Copyright (c) 2001 Steven Knight
+# __FILE__ __REVISION__ __DATE__ __DEVELOPER__
+
+
+                 SCons - a software construction tool
+
+                            Change Log
+
+
+
+RELEASE 0.02 - 
+
+  - Fixed the version comment in the scons.bat (the UNIX geek used
+    # instead of @rem).
+
+  - Fix to setup.py so it doesn't require a sys.argv[1] argument.
+
+  From Charles Crain:
+
+  - Added support for the Install method.
+
+  - Added support for the BuildDir method.
+
+  - Added the Export method.
+
+  - Fix the -C option by delaying setting the top of the FS tree.
+
+  - Avoid putting the directory path on the libraries in the LIBS
+    construction variable.
+
+  - Added a GetBuildPath() method to return the full path to the
+    Node for a specified string.
+
+  From Anthony Roach:
+
+  - Documented CXXFLAGS, CXXCOM, and CPPPATH.
+
+  - Fixed SCONS_LIB_DIR to work as documented.
+
+  - Made Default() accept Nodes as arguments.
+
+  - Changed Export() to make it easier to use
+  
+  - Added Import() method.
+  
+  - Added Return() method.
+
+
+
+RELEASE 0.01 - Thu Dec 13 19:25:23 CST 2001
+
+A brief overview of important functionality available in release 0.01:
+
+  - C and C++ compilation on POSIX and Windows NT.
+
+  - Automatic scanning of C/C++ source files for #include dependencies.
+
+  - Support for building libraries; setting construction variables
+    allows creation of shared libraries.
+
+  - Library and C preprocessor search paths.
+
+  - File changes detected using MD5 signatures.
+
+  - User-definable Builder objects for building files.
+
+  - User-definable Scanner objects for scanning for dependencies.
+
+  - Parallel build (-j) support.
+
+  - Dependency cycles detected.
+
+  - Linux packages available in RPM and Debian format.
+
+  - Windows installer available.

@@ -1,0 +1,138 @@
+#
+# Conscript file for building SCons documentation.
+#
+
+Import qw( env );
+
+#
+#
+#
+$doc_tar_gz = "#build/dist/scons-doc-${\$env->{VERSION}}.tar.gz";
+
+#
+# We'll only try to build text files (for some documents)
+# if lynx is available to do the dump.
+#
+$lynx = cons::whereis('lynx');
+
+#
+# Always create a version.sgml file containing the version information
+# for this run.  Ignore it for dependency purposes so we don't
+# rebuild all the docs every time just because the date changes.
+#
+$verfile = SourcePath("version.sgml");
+unlink($verfile);
+chmod(0664, $verfile);
+open(FILE, ">$verfile") || die "Cannot open '$verfile': $!";
+print FILE <<_EOF_;
+<!--
+THIS IS AN AUTOMATICALLY-GENERATED FILE.  DO NOT EDIT.
+-->
+<!ENTITY build_date "${\$env->{DATE}}">
+<!ENTITY build_version "${\$env->{VERSION}}">
+<!ENTITY build_revision "${\$env->{REVISION}}">
+_EOF_
+close(FILE);
+
+Ignore("version.sgml");
+
+#
+# Each document will live in its own subdirectory.  List them here
+# as hash keys, with a hash of the info to control its build.
+#
+%doc_dirs = (
+    'design' => {
+    		'html'	=> 'book1.html',
+	},
+    'man' => {
+    		'html'	=> 'scons.html',
+		'text'	=> 1,
+	},
+    'user' => {
+    		'html'	=> 'book1.html',
+	},
+);
+
+# Find internal dependencies in .sgml files:
+#
+#	<!entity bground SYSTEM "bground.sgml">
+#	<graphic fileref="file.jpg">
+#
+# This only finds one per line, and assumes that anything
+# defined as a SYSTEM entity is, in fact, a file included
+# somewhere in the document.
+sub scansgml {
+    my @includes = ();
+    do {
+	if (/<!entity\s+(?:%\s+)?(?:\S+)\s+SYSTEM\s+"([^"]*)">/i) {
+	    push(@includes, $1);
+  	} elsif (/<graphic[^>]*\sfileref="([^"]*)"/) {
+	    push(@includes, "design/$1");
+	}
+    } while (<scan::quickscan::SCAN>);
+    @includes;
+}
+
+#
+# We have to tell Cons to QuickScan the top-level SGML files which
+# get included by the document SGML files in the subdirectories.
+#
+@included_sgml = qw(
+    scons.mod
+    copyright.sgml
+);
+
+foreach $sgml (@included_sgml) {
+    $env->QuickScan(\&scansgml, $sgml);
+}
+
+#
+# For each document, build the document itself in HTML, Postscript,
+# and PDF formats.
+#
+foreach $doc (keys %doc_dirs) {
+    my $main = "$doc/main.sgml";
+    my $out = "main.out";
+
+    my $htmldir = "HTML/scons-$doc";
+    my $html = "$htmldir/" . $doc_dirs{$doc}->{'html'};
+    my $ps = "PS/scons-$doc.ps";
+    my $pdf = "PDF/scons-$doc.pdf";
+    my $text = "TEXT/scons-$doc.txt";
+
+    $env->QuickScan(\&scansgml, $main);
+
+    $env->Command($html, $main,
+	[qq(rm -f %>:d/*.html),
+	 qq(jw -b html -o %>:d %<),
+	]);
+
+    $env->Command($ps, $main,
+	[qq(rm -f %>:d/$out),
+	 qq(jw -b ps -o %>:d %<),
+	 qq(mv %>:d/main.ps %>),
+	 qq(rm -f %>:d/$out),
+	]);
+
+    $env->Command($pdf, $main,
+	[qq(rm -f %>:d/$out),
+	 qq(jw -b pdf -o %>:d %<),
+	 qq(mv %>:d/main.pdf %>),
+	 qq(rm -f %>:d/$out),
+	]);
+
+    if ($doc_dirs{$doc}->{'text'} && $lynx) {
+	$env->Command($text, $html, qq(lynx -dump %<:a > %>));
+    }
+
+    push(@tar_deps, $html, $ps, $pdf);
+    push(@tar_list, $htmldir, $ps, $pdf);
+}
+
+#
+# Now actually create the tar file of the documentation,
+# for easy distribution to the web site.
+#
+$env->Command($doc_tar_gz,
+	      @tar_deps,
+	      qq(tar zchv -f %> -C build/doc @tar_list));

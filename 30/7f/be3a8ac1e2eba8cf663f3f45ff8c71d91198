@@ -1,0 +1,119 @@
+#
+# Conscript file for building SCons documentation.
+#
+
+Import qw(
+    date
+    env
+    revision
+    version
+);
+
+#
+#
+#
+$doc_tar_gz = "#build/dist/scons-doc-$version.tar.gz";
+
+#
+# Always create a version.sgml file containing the version information
+# for this run.  Ignore it for dependency purposes so we don't
+# rebuild all the docs every time just because the date changes.
+#
+$verfile = SourcePath("version.sgml");
+unlink($verfile);
+chmod(0664, $verfile);
+open(FILE, ">$verfile") || die "Cannot open '$verfile': $!";
+print FILE <<_EOF_;
+<!--
+THIS IS AN AUTOMATICALLY-GENERATED FILE.  DO NOT EDIT.
+-->
+<!ENTITY build_date "$date">
+<!ENTITY build_version "$version">
+<!ENTITY build_revision "$revision">
+_EOF_
+close(FILE);
+
+Ignore("version.sgml");
+
+#
+# Each document will live in its own subdirectory.  List them here.
+#
+@doc_dirs = qw(
+    design
+);
+
+# Find internal dependencies in .sgml files:
+#
+#	<!entity bground SYSTEM "bground.sgml">
+#	<graphic fileref="file.jpg">
+#
+# This only finds one per line, and assumes that anything
+# defined as a SYSTEM entity is, in fact, a file included
+# somewhere in the document.
+sub scansgml {
+    my @includes = ();
+    do {
+	if (/<!entity\s+(?:%\s+)?(?:\S+)\s+SYSTEM\s+"([^"]*)">/i) {
+	    push(@includes, $1);
+  	} elsif (/<graphic[^>]*\sfileref="([^"]*)"/) {
+	    push(@includes, "design/$1");
+	}
+    } while (<scan::quickscan::SCAN>);
+    @includes;
+}
+
+#
+# We have to tell Cons to QuickScan the top-level SGML files which
+# get included by the document SGML files in the subdirectories.
+#
+@included_sgml = qw(
+    scons.mod
+    copyright.sgml
+);
+
+foreach $sgml (@included_sgml) {
+    $env->QuickScan(\&scansgml, $sgml);
+}
+
+#
+# For each document, build the document itself in HTML, Postscript,
+# and PDF formats.
+#
+foreach $doc (@doc_dirs) {
+    my $main = "$doc/main.sgml";
+    my $out = "main.out";
+
+    my $htmldir = "HTML/scons-$doc";
+    my $ps = "PS/scons-$doc.ps";
+    my $pdf = "PDF/scons-$doc.pdf";
+
+    $env->QuickScan(\&scansgml, $main);
+
+    $env->Command("$htmldir/book1.html", $main,
+	qq(jw -b html -o %>:d %<));
+
+    $env->Command($ps, $main,
+	[qq(rm -f %>:d/$out),
+	 qq(jw -b ps -o %>:d %<),
+	 qq(mv %>:d/main.ps %>),
+	 qq(rm -f %>:d/$out),
+	]);
+
+    $env->Command($pdf, $main,
+	[qq(rm -f %>:d/$out),
+	 qq(jw -b pdf -o %>:d %<),
+	 qq(mv %>:d/main.pdf %>),
+	 qq(rm -f %>:d/$out),
+	]);
+
+    push(@tar_deps, "$htmldir/book1.html", $ps, $pdf);
+    push(@tar_list, "$htmldir/[A-Za-z]*", $ps, $pdf);
+}
+
+#
+# Now actually create the tar file of the documentation,
+# for easy distribution to the web site.
+#
+$env->Command($doc_tar_gz,
+	      @tar_deps,
+	      qq(cd build/doc && tar zcvf ../dist/%>:f @tar_list));

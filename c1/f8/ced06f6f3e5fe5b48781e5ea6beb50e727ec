@@ -1,0 +1,13 @@
+Source: scons
+Section: devel
+Priority: optional
+Maintainer: Moshe Zadka <moshez@debian.org>
+Build-Depends-Indep: debhelper (>> 2.0.0), python2.1
+Standards-Version: 3.2.1
+
+Package: scons
+Architecture: all
+Depends: python2.1
+Description: A replacement for Make
+ Scons is able to build files from other files, based on the
+ dependency DAG.

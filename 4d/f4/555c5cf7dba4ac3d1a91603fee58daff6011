@@ -1,0 +1,339 @@
+#
+# Construct file to build scons during development.
+# (Kind of ironic that we're using the classic Perl Cons
+# to build its Python child...)
+#
+
+#
+# Copyright (c) 2001 Steven Knight
+#
+# Permission is hereby granted, free of charge, to any person obtaining
+# a copy of this software and associated documentation files (the
+# "Software"), to deal in the Software without restriction, including
+# without limitation the rights to use, copy, modify, merge, publish,
+# distribute, sublicense, and/or sell copies of the Software, and to
+# permit persons to whom the Software is furnished to do so, subject to
+# the following conditions:
+#
+# The above copyright notice and this permission notice shall be included
+# in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY
+# KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
+# WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+# NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+# LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+# OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+# WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+#
+
+$project = 'scons';
+
+Default qw( . );
+
+#
+# An internal "whereis" routine to figure out if we have a
+# given program available.  Put it in the "cons::" package
+# so subsidiary Conscript files can get at it easily, too.
+#
+use Config;
+sub cons::whereis {
+    my $file = shift;
+    foreach my $dir (split(/$Config{path_sep}/, $ENV{PATH})) {
+	$f = File::Spec->catfile($dir, $file);
+	return $f if -x $f;
+    }
+    return undef
+}
+
+#
+# We let the presence or absence of various utilities determine
+# whether or not we bother to build certain pieces of things.
+# This will allow people to still do SCons work even if they
+# don't have Aegis or RPM installed, for example.
+#
+$aegis = cons::whereis('aegis');
+$aesub = cons::whereis('aesub');
+$rpm = cons::whereis('rpm');
+$jw = cons::whereis('jw');
+$dh_builddeb = cons::whereis('dh_builddeb');
+$fakeroot = cons::whereis('fakeroot');
+
+#
+# Now grab the information that we "build" into the files (using sed).
+#
+chomp($date = $ARG{date});
+if (! $date) {
+    ($sec,$min,$hour,$mday,$mon,$year) = localtime(time);
+    $year += 1900;
+    $date = sprintf("%4d/%02d/%02d %02d:%02d:%02d",
+		    $year, $mon, $mday, $hour, $min, $sec);
+}
+
+$developer = $ARG{developer} || $ENV{USERNAME} || $ENV{LOGNAME} || $ENV{USER};
+
+$revision = $ARG{version};
+chomp($revision = `$aesub '\$version' 2>/dev/null`) if $aesub && ! $revision;
+$revision = '0.01' if ! $revision;
+
+$change = $ARG{change};
+chomp($change = `$aesub '\$change' 2>/dev/null`) if $aesub && ! $change;
+
+@arr = split(/\./, $revision);
+@arr = ($arr[0], map {length($_) == 1 ? "0$_" : $_} @arr[1 .. $#arr]);
+$revision = join('.', @arr);
+pop @arr if $#arr >= 2;
+map {s/^[CD]//, s/^0*(\d\d)$/$1/} @arr;
+$version = join('.', @arr);
+
+chomp($python_ver = `python -c "import sys; print sys.version[0:3]"`);
+
+chomp($platform = `python -c "from distutils.util import get_platform; print get_platform()"`);
+
+if ($platform eq "win32") {
+    $archsuffix = "zip"
+} else {
+    $archsuffix = "tar.gz"
+}
+
+
+use Cwd;
+$test_dir = File::Spec->catfile(cwd, "build", "test");
+
+%package_name = (
+    'script'	=> $project,
+    'engine'	=> "$project-pylib",
+);
+
+$test_bin_dir = File::Spec->catfile($test_dir, "bin");
+$test_lib_dir = File::Spec->catfile($test_dir,
+				    "lib",
+				    "python${python_ver}",
+				    "site-packages"),
+
+%install_dir = (
+    'script'	=> $test_bin_dir,
+    'engine'	=> $test_lib_dir,
+);
+
+$env = new cons( ENV => {
+			  AEGIS_PROJECT => $ENV{AEGIS_PROJECT},
+			  PATH => $ENV{PATH},
+			},
+
+		 TEST_BIN_DIR	=> $test_bin_dir,
+		 TEST_LIB_DIR	=> $test_lib_dir,
+
+		 DATE		=> $date,
+		 DEVELOPER	=> $developer,
+		 REVISION	=> $revision,
+		 VERSION	=> $version,
+
+		 SED		=> 'sed',
+				   # Use %(-%) around the date so date
+				   # changes don't cause rebuilds.
+		 SEDFLAGS	=> " %( -e 's+__DATE__+%DATE+' %)" .
+				   " -e 's+__DEVELOPER__+%DEVELOPER+'" .
+				   " -e 's+__FILE__+%<+'" .
+				   " -e 's+__REVISION__+%REVISION+'" .
+				   " -e 's+__VERSION__+%VERSION+'",
+		 SEDCOM		=> "%SED %SEDFLAGS %< > %>",
+		);
+
+my @src_deps;
+
+my %src_file = (
+    'scons'		=> 'scons.py',
+    'LICENSE.txt'	=> '../LICENSE.txt'
+);
+
+for $dir ('script', 'engine') {
+
+    my $pkg = $package_name{$dir};
+    my $install = $install_dir{$dir};
+
+    my $build = "build/$dir";
+    my $src = "src/$dir";
+
+    my @files;
+    chomp(@files = `cat src/$dir/MANIFEST`);
+
+    #
+    # Run everything in the MANIFEST through the sed command we concocted.
+    #
+    foreach $b (@files) {
+	my $s = $src_file{$b} || $b;
+	$env->Command("$build/$b", "$src/$s", "%SEDCOM");
+    }
+
+    #
+    # Use the Python distutils to generate the packages.
+    #
+    my $archive = "$build/dist/$pkg-$version.$archsuffix";
+
+    push(@src_deps, $archive);
+
+    my @setup_args = ('bdist sdist');
+
+    my @targets = (
+	"$build/dist/$pkg-$version.$platform.$archsuffix",
+	$archive,
+    );
+
+    if ($rpm) {
+	push(@setup_args, 'bdist_rpm');
+
+	# XXX "$build/build/bdist.$platform/rpm/SOURCES/$pkg-$version.$archsuffix",
+	# XXX "$build/build/bdist.$platform/rpm/SPECS/$pkg.spec",
+	push(@targets,
+	    "$build/dist/$pkg-$version-1.src.rpm",
+	    "$build/dist/$pkg-$version-1.noarch.rpm",
+	);
+    };
+
+    # We can get away with calling setup.py using a directory path
+    # like this because we put a preamble in it that will chdir()
+    # to the directory in which setup.py exists.
+    $env->Command([@targets],
+	      map("$build/$_", @files),
+	      qq(rm -rf $build/build $build/dist/*
+		 python $build/setup.py @setup_args)
+	     );
+
+    $env->Depends([@targets], "$build/MANIFEST");
+
+    $env->Install("build/dist", @targets);
+
+    #
+    # Unpack the archive created by the distutils into build/unpack.
+    #
+    my $unpack = "build/unpack";
+
+    my @unpack_files = map("$unpack/$pkg-$version/$_", @files);
+
+    # We'd like to replace the last three lines with the following:
+    #
+    #	tar zxf %< -C $unpack
+    #
+    # but that gives heartburn to Cygwin's tar, so work around it
+    # with separate zcat-tar-rm commands.
+    Command $env [@unpack_files], $archive, qq(
+	rm -rf $unpack/$pkg-$version
+	zcat %< > .temp
+	tar xf .temp -C $unpack
+	rm -f .temp
+    );
+
+    #
+    # Run setup.py in the unpacked subdirectory to "install" everything
+    # into our build/test subdirectory.  Auxiliary modules that we need
+    # (TestCmd.py, TestSCons.py, unittest.py) will be copied in by
+    # etc/Conscript.  The runtest.py script will set PYTHONPATH so that
+    # the tests only look under build/test.  This makes sure that our
+    # tests pass with what we really packaged, not because of something
+    # hanging around in the development directory.
+    #
+    my %seen;
+    map($seen{$_}++, "MANIFEST", "setup.py");
+    @test_files = map(File::Spec->catfile($install, $_),
+    			grep(!$seen{$_}++ &&
+			     ($_ =~ /\.py$/ || $src_file{$_}), @files));
+
+    # We can get away with calling setup.py using a directory path
+    # like this because we put a preamble in it that will chdir()
+    # to the directory in which setup.py exists.
+    Command $env [@test_files], @unpack_files, qq(
+	rm -rf $install
+	python $unpack/$pkg-$version/setup.py install --prefix=$test_dir
+    );
+}
+
+Export qw( env );
+
+Build "etc/Conscript";
+
+#
+# Documentation.
+#
+if ($jw) {
+    Link 'build/doc' => 'doc';
+
+    Build 'build/doc/Conscript';
+}
+
+#
+# If we're running in the actual Aegis project, pack up a complete
+# source archive from the project files and files in the change,
+# so we can share it with helpful developers who don't use Aegis.
+#
+# First, lie and say that we've seen any files removed by this
+# change, so they don't get added to the source files list
+# that goes into the archive.
+#
+
+if ($change) {
+    foreach (`aegis -list -unf -c $change cf 2>/dev/null`) {
+	$seen{"$1\n"}++ if /^(?:source|test) remove(?:\s.*)+\s(\S+)$/;
+    }
+
+    eval '@src_files = grep(! $seen{$_}++,
+		    `aegis -list -terse pf 2>/dev/null`,
+		    `aegis -list -terse cf 2>/dev/null`)';
+
+    @src_files = grep($_ !~ /(\.aeignore|\.consign)$/, @src_files);
+
+    if (@src_files) {
+	chomp(@src_files);
+
+	foreach $file (@src_files) {
+	    $env->Command("build/$project-src/$file", 
+			  $file, 
+	                  qq(%SEDCOM
+                             chmod --reference=%< %>)
+            );
+	}
+
+	$env->Command("build/dist/$project-src-$version.tar.gz",
+    		      @src_deps,
+		      map("build/$project-src/$_", @src_files),
+		      qq(
+		rm -rf build/$project-src-$version
+		cp -rp build/$project-src build/$project-src-$version
+		find build/$project-src-$version -name .consign -exec rm {} \\;
+		tar zcf %> -C build $project-src-$version
+	));
+    }
+}
+
+#
+# Build the Debian packages if debhelper and fakeroot are available
+#
+if ($dh_builddeb && $fakeroot){
+    @deb_targets = ("build/dist/scons_$version-1_all.deb", 
+		    "build/dist/python-scons_$version-1_all.deb",
+		    "build/dist/python2-scons_$version-1_all.deb"
+		   );
+    
+    @deb_deps = ("debian/rules",
+		 "debian/control",
+		 "debian/changelog",
+		 "debian/copyright",
+		 "debian/python-scons.postinst",
+		 "debian/python-scons.prerm",
+		 "debian/python2-scons.postinst",
+		 "debian/python2-scons.prerm"
+		);
+    
+    chomp(@engine_files = `cat src/engine/MANIFEST`);
+    chomp(@script_files = `cat src/script/MANIFEST`);
+    
+    $env->Command([@deb_targets], 
+		  @deb_deps,
+		  map("build/engine/$_", @engine_files),
+		  map("build/script/$_", @script_files),
+		  qq(rm -rf build/engine/build build/engine/dist
+		     rm -rf build/script/build build/script/dist
+		     fakeroot debian/rules ENVOKED_BY_CONSTRUCT=1 binary
+		     env DH_COMPAT=3 dh_clean
+    ));
+}

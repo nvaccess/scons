@@ -1,0 +1,90 @@
+  A new SCons release, 2.3.2, is now available
+  on the SCons download page:
+
+          http://www.scons.org/download.php
+
+  This is a maintenance release, focusing on bug fixes.
+
+  Here is a summary of the changes since 2.3.2:
+
+  NEW FUNCTIONALITY
+
+    - Added Copy Action symlink soft-copy support (#2395).
+
+  DEPRECATED FUNCTIONALITY
+
+    - None
+
+  CHANGED/ENHANCED EXISTING FUNCTIONALITY
+
+    - Improved SWIG detection
+
+  FIXES
+
+    - Fix regression on Windows in D language update
+    - Fixed the newglossary action to work with VariantDir (LaTeX).
+    - Added a default for the BUILDERS environment variable,
+      to prevent not defined exception on a Clone().
+    - Fixed handling of CPPDEFINE var in Append()
+      for several list-dict combinations (#2900).
+
+  PACKAGING
+
+    - No changes
+
+  DEVELOPMENT
+
+    - Do not fail on EnsureSConsVersion when running from checkout
+
+Thanks to:
+  Dirk Baechle,
+  Vincent Beffar,
+  Thomas Berg,
+  William Blevins,
+  Kendrick Boyd,
+  Antonio Cavallo,
+  Jean-François Colson,
+  Bauke Conijn,
+  Bill Deegan,
+  Ken Deeter,
+  dubcanada on Bitbucket,
+  Luca Falavigna,
+  Andrew Featherstone,
+  Alexandre Feblot,
+  Shane Gannon,
+  Alexander Goomenyuk,
+  Justin Gullingsrud,
+  Michael Haubenwallner,
+  Joshua Hughes,
+  Alexey Klimkin,
+  Steven Knight,
+  Arve Knudsen,
+  Philipp Kraus,
+  Jean-Baptiste Lab,
+  Juan Lang,
+  Rob Managan,
+  Michael McDougall,
+  Mortoray,
+  Manuel Francisco Naranjo,
+  Gary Oberbrunner,
+  Alexey Petruchik,
+  Evgeny Podjachev,
+  David Rothenberger,
+  smallbub on Bitbucket,
+  Sohail Somani,
+  Stefan Sperling,
+  Amir Szekely,
+  Tom Tanner,
+  Anatoly Techtonik,
+  Bogdan Tenea,
+  Paweł Tomulik,
+  Sye van der Veen,
+  veon on bitbucket,
+  Greg Ward,
+  Allen Weeks,
+  Russel Winder,
+  Joe Zuntz
+  for their contributions to this and prior releases.
+
+__COPYRIGHT__
+__FILE__ __REVISION__ __DATE__ __DEVELOPER__

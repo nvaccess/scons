@@ -1,0 +1,332 @@
+#
+# SConscript file for building SCons documentation.
+#
+
+#
+# Copyright (c) 2001, 2002, 2003 Steven Knight
+#
+# Permission is hereby granted, free of charge, to any person obtaining
+# a copy of this software and associated documentation files (the
+# "Software"), to deal in the Software without restriction, including
+# without limitation the rights to use, copy, modify, merge, publish,
+# distribute, sublicense, and/or sell copies of the Software, and to
+# permit persons to whom the Software is furnished to do so, subject to
+# the following conditions:
+#
+# The above copyright notice and this permission notice shall be included
+# in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY
+# KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
+# WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+# NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+# LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+# OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+# WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+#
+
+import os.path
+import re
+import string
+
+Import('env', 'whereis')
+
+build = os.path.join('#build', 'doc')
+
+#
+#
+#
+doc_tar_gz = os.path.join('#build',
+                          'dist',
+                          'scons-doc-%s.tar.gz' % env.Dictionary('VERSION'))
+
+#
+# We'll only try to build text files (for some documents)
+# if lynx is available to do the dump.
+#
+fig2dev = whereis('fig2dev')
+groff = whereis('groff')
+lynx = whereis('lynx')
+man2html = whereis('man2html')
+jade = whereis('jade')
+jadetex = whereis('jadetex')
+pdfjadetex = whereis('pdfjadetex')
+jw = whereis('jw')
+tidy = whereis('tidy')
+
+tar_deps = []
+tar_list = []
+
+entity_re = re.compile(r'<!entity\s+(?:%\s+)?(?:\S+)\s+SYSTEM\s+"([^"]*)">', re.I)
+format_re = re.compile(r'<(?:graphic|imagedata)\s+fileref="([^"]*)"(?:\s+format="([^"]*)")?')
+
+#
+# Find internal dependencies in .sgml files:
+#
+#   <!entity bground SYSTEM "bground.sgml">
+#   <graphic fileref="file.jpg">
+#   <imagedata fileref="file.jpg">
+#
+# This only finds one per line, and assumes that anything
+# defined as a SYSTEM entity is, in fact, a file included
+# somewhere in the document.
+#
+def scansgml(node, env, target):
+    includes = []
+
+    contents = node.get_contents()
+
+    includes.extend(entity_re.findall(contents))
+
+    matches = format_re.findall(contents)
+    for m in matches:
+        file, format = m
+        if format and file[-len(format):] != format:
+            file = file + '.' + format
+        if not os.path.isabs(file):
+            a = []
+            f = file
+            while f:
+                f, tail = os.path.split(f)
+                if tail == 'doc':
+                    break
+                a = [tail] + a
+            file = apply(os.path.join, a, {})
+        includes.append(file)
+
+    return includes
+
+s = Scanner(name = 'sgml', function = scansgml, skeys = ['.sgml', '.mod'])
+orig_env = env
+env = orig_env.Copy(SCANNERS = [s])
+
+if jw:
+    #
+    # Always create a version.sgml file containing the version information
+    # for this run.  Ignore it for dependency purposes so we don't
+    # rebuild all the docs every time just because the date changes.
+    #
+    date, ver, rev = env.Dictionary('DATE', 'VERSION', 'REVISION')
+    version_sgml = File(os.path.join(build, "version.sgml"))
+    #version_sgml = File("version.sgml")
+    verfile = str(version_sgml)
+    try:
+        os.unlink(verfile)
+    except OSError:
+        pass    # okay if the file didn't exist
+    dir, f = os.path.split(verfile)
+    try:
+        os.makedirs(dir)
+    except OSError:
+        pass	# okay if the directory already exists
+    open(verfile, "w").write("""<!--
+THIS IS AN AUTOMATICALLY-GENERATED FILE.  DO NOT EDIT.
+-->
+<!ENTITY builddate "%s">
+<!ENTITY buildversion "%s">
+<!ENTITY buildrevision "%s">
+""" % (date, ver, rev))
+
+    #
+    # Each document will live in its own subdirectory.  List them here
+    # as hash keys, with a hash of the info to control its build.
+    #
+    docs = {
+        'design' : {
+                'htmlindex' : 'book1.html',
+                'ps'        : 1,
+                'pdf'       : 1,
+                'text'      : 0,
+        },
+        'python10' : {
+                'htmlindex' : 't1.html',
+                'html'      : 1,
+                'ps'        : 1,
+                'pdf'       : 0,
+                'text'      : 0,
+                'graphics'  : [ 'arch', 'builder', 'job-task', 'node', 'scanner', 'sig' ],
+        },
+        'reference' : {
+                'htmlindex' : 'book1.html',
+                'html'      : 1,
+                'ps'        : 1,
+                'pdf'       : 1,
+                'text'      : 0,
+        },
+        'user' : {
+                'htmlindex' : 'book1.html',
+                'html'      : 1,
+                'ps'        : 1,
+                'pdf'       : 1,
+                'text'      : 0,
+        },
+    }
+
+    #
+    # We have to tell SCons to scan the top-level SGML files which
+    # get included by the document SGML files in the subdirectories.
+    #
+    manifest = File('MANIFEST').rstr()
+    src_files = map(lambda x: x[:-1], open(manifest).readlines())
+    for s in src_files:
+        base, ext = os.path.splitext(s)
+        if ext in ['.fig', '.jpg']:
+            orig_env.Install(build, s)
+        else:
+            orig_env.SCons_revision(os.path.join(build, s), s)
+        Local(os.path.join(build, s))
+
+    #
+    # For each document, build the document itself in HTML, Postscript,
+    # and PDF formats.
+    #
+    for doc in docs.keys():
+        manifest = File(os.path.join(doc, 'MANIFEST')).rstr()
+        src_files = map(lambda x: x[:-1],
+                        open(manifest).readlines())
+        for s in src_files:
+            base, ext = os.path.splitext(s)
+            if ext in ['.fig', '.jpg']:
+                orig_env.Install(os.path.join(build, doc), os.path.join(doc, s))
+            else:
+                orig_env.SCons_revision(os.path.join(build, doc, s),
+                                        os.path.join(doc, s))
+            Local(os.path.join(build, doc, s))
+
+        main = os.path.join(build, doc, 'main.sgml')
+        out = 'main.out'
+
+        # Hard-coding the scons-src path is a bit of a hack.  This can
+        # be reworked when a better solution presents itself.
+        scons_src_main = os.path.join('#build', 'scons-src', 'doc', main)
+        env.Ignore(scons_src_main, version_sgml)
+
+        htmldir = os.path.join(build, 'HTML', 'scons-%s' % doc)
+        htmlindex = os.path.join(htmldir, docs[doc]['htmlindex'])
+        html = os.path.join(build, 'HTML', 'scons-%s.html' % doc)
+        ps = os.path.join(build, 'PS', 'scons-%s.ps' % doc)
+        pdf = os.path.join(build, 'PDF', 'scons-%s.pdf' % doc)
+        text = os.path.join(build, 'TEXT', 'scons-%s.txt' % doc)
+
+        if docs[doc].get('html') and jade:
+            cmds = [
+                "rm -f ${TARGET.dir}/*.html",
+                "jw -b html -o ${TARGET.dir} $SOURCES",
+                "mv -v ${TARGET.dir}/index.html $TARGET || true",
+            ]
+            if tidy:
+                cmds.append("tidy -m -q $TARGET || true")
+            env.Command(htmlindex, main, cmds)
+            Local(htmlindex)
+
+            cmds = [
+                "rm -f ${TARGET.dir}/main.html",
+                "jw -u -b html -o ${TARGET.dir} $SOURCES",
+                "mv -v ${TARGET.dir}/main.html $TARGET || true",
+            ]
+            if tidy:
+                cmds.append("tidy -m -q $TARGET || true")
+            env.Command(html, main, cmds)
+            Local(html)
+
+            env.Ignore([html, htmlindex], version_sgml)
+
+            tar_deps.extend([html, htmlindex])
+            tar_list.extend([html, htmldir])
+
+            if fig2dev:
+                for g in docs[doc].get('graphics', []):
+                    fig = os.path.join(build, doc, '%s.fig' % g)
+                    jpg = os.path.join(htmldir, '%s.jpg' % g)
+                    env.Command(jpg, fig,
+                                "%s -L jpeg -q 100 $SOURCES $TARGET" % fig2dev)
+                    env.Depends(html, jpg)
+                    Local(jpg)
+
+        if docs[doc].get('ps') and jadetex:
+            env.Command(ps, main, [
+                "rm -f ${TARGET.dir}/%s" % out,
+                "jw -b ps -o ${TARGET.dir} $SOURCES",
+                "mv ${TARGET.dir}/main.ps $TARGET",
+                "rm -f ${TARGET.dir}/%s" % out,
+            ])
+            Local(ps)
+
+            env.Ignore(ps, version_sgml)
+
+            tar_deps.append(ps)
+            tar_list.append(ps)
+
+            if fig2dev:
+                for g in docs[doc].get('graphics', []):
+                    fig = os.path.join(build, doc, '%s.fig' % g)
+                    eps = os.path.join(build, 'PS', '%s.eps' % g)
+                    env.Command(eps, fig, "%s -L eps $SOURCES $TARGET" % fig2dev)
+                    env.Depends(ps, eps)
+                    Local(eps)
+
+        if docs[doc].get('pdf') and pdfjadetex:
+            env.Command(pdf, main, [
+                "rm -f ${TARGET.dir}/%s" % out,
+                "jw -b pdf -o ${TARGET.dir} $SOURCES",
+                "mv ${TARGET.dir}/main.pdf $TARGET",
+                "rm -f ${TARGET.dir}/out",
+            ])
+            Local(pdf)
+
+            env.Ignore(pdf, version_sgml)
+
+            tar_deps.append(pdf)
+            tar_list.append(pdf)
+
+        if docs[doc].get('text') and jade and lynx:
+            env.Command(text, html, "lynx -dump ${SOURCE.abspath} > $TARGET")
+            Local(text)
+
+            env.Ignore(text, version_sgml)
+
+            tar_deps.append(text)
+            tar_list.append(text)
+
+#
+# Man page(s), in good ol' troff format.
+#
+man_page_list = ['scons', 'sconsign']
+
+for man in man_page_list:
+    man_1 = os.path.join('man', '%s.1' % man)
+
+    if groff:
+        ps = os.path.join(build, 'PS', '%s-man.ps' % man)
+        text = os.path.join(build, 'TEXT', '%s-man.txt' % man)
+
+        env.Command(ps, man_1, "groff -man -Tps $SOURCES > $TARGET")
+        Local(ps)
+
+        env.Command(text, man_1, "groff -man -Tascii $SOURCES > $TARGET")
+        Local(text)
+
+        tar_deps.extend([ps, text])
+        tar_list.extend([ps, text])
+
+    if man2html:
+        html = os.path.join(build, 'HTML' , '%s-man.html' % man)
+
+        cmds = [ "man2html $SOURCES > $TARGET" ]
+        if tidy:
+            cmds.append("tidy -m -q $TARGET || true")
+        env.Command(html, man_1, cmds)
+        Local(html)
+
+        tar_deps.append(html)
+        tar_list.append(html)
+
+#
+# Now actually create the tar file of the documentation,
+# for easy distribution to the web site.
+#
+if tar_deps:
+    tar_list = string.join(map(lambda x: x[11:], tar_list))
+    env.Command(doc_tar_gz, tar_deps,
+                "tar cf${TAR_HFLAG} - -C build/doc %s | gzip > $TARGET" % tar_list)
+    Local(doc_tar_gz)

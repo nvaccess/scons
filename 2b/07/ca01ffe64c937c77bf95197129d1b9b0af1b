@@ -1,0 +1,9 @@
+env = Environment(
+    DFLAGS=['-m64', '-O'],
+    )
+
+env.Program('proj', [
+'proj.d',
+'dmod.d',
+'cmod.c',
+])

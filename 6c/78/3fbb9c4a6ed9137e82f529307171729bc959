@@ -1,0 +1,252 @@
+<!--
+
+  Copyright (c) 2001, 2002, 2003 Steven Knight
+
+  Permission is hereby granted, free of charge, to any person obtaining
+  a copy of this software and associated documentation files (the
+  "Software"), to deal in the Software without restriction, including
+  without limitation the rights to use, copy, modify, merge, publish,
+  distribute, sublicense, and/or sell copies of the Software, and to
+  permit persons to whom the Software is furnished to do so, subject to
+  the following conditions:
+
+  The above copyright notice and this permission notice shall be included
+  in all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY
+  KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
+  WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+  NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+  LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+  OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+  WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+-->
+
+  <para>
+
+  It's often useful to organize large software projects
+  by collecting parts of the software into one or more libraries.
+  &SCons; makes it easy to create libraries
+  and to use them in the programs.
+
+  </para>
+
+  <section>
+  <title>Building Libraries</title>
+
+    <para>
+
+    You build your own libraries by specifying &Library;
+    instead of &Program;:
+
+    </para>
+
+    <programlisting>
+      Library('foo', ['f1.c', 'f2.c', 'f3.c'])
+    </programlisting>
+
+    <para>
+
+    &SCons; uses the appropriate library prefix and suffix for your system.
+    So on POSIX or Linux systems,
+    the above example would build as follows
+    (although &ranlib; may not be called on all systems):
+
+    </para>
+
+    <literallayout>
+      % <userinput>scons -Q</userinput>
+      cc -c -o f1.o f1.c
+      cc -c -o f2.o f2.c
+      cc -c -o f3.o f3.c
+      ar r libfoo.a f1.o f2.o f3.o
+      ranlib libfoo.a
+    </literallayout>
+
+    <para>
+
+    On a Windows system,
+    a build of the above example would look like:
+
+    </para>
+
+    <literallayout>
+      C:\><userinput>scons -Q</userinput>
+      cl /nologo /c f1.c /Fof1.obj
+      cl /nologo /c f2.c /Fof2.obj
+      cl /nologo /c f3.c /Fof3.obj
+      lib /nologo /OUT:foo.lib f1.obj f2.obj f3.obj
+    </literallayout>
+
+    <para>
+
+    The rules for the target name of the library
+    are similar to those for programs:
+    if you don't explicitly specify a target library name,
+    &SCons; will deduce one from the
+    name of the first source file specified,
+    and &SCons; will add an appropriate
+    file prefix and suffix if you leave them off.
+
+    </para>
+
+  </section>
+
+  <section>
+  <title>Linking with Libraries</title>
+
+    <para>
+
+    Usually, you build a library
+    because you want to link it with one or more programs.
+    You link libraries with a program by specifying
+    the libraries in the &LIBS; construction variable,
+    and by specifying the directory in which
+    the library will be found in the 
+    &LIBPATH; construction variable:
+
+    </para>
+
+    <programlisting>
+      Library('foo', ['f1.c', 'f2.c', 'f3.c'])
+      Program('prog.c', LIBS='foo', LIBPATH='.')
+    </programlisting>
+
+    <para>
+
+    Notice, of course, that you don't need to specify a library
+    prefix (like <literal>lib</literal>)
+    or suffix (like <literal>.a</literal> or <literal>.lib</literal>).
+    &SCons; uses the correct prefix or suffix for the current system.
+
+    </para>
+
+    <para>
+
+    On a POSIX or Linux system,
+    a build of the above example would look like:
+
+    </para>
+
+    <literallayout>
+      % <userinput>scons -Q</userinput>
+      cc -c -o f1.o f1.c
+      cc -c -o f2.o f2.c
+      cc -c -o f3.o f3.c
+      ar r libfoo.a f1.o f2.o f3.o
+      ranlib libfoo.a
+      cc -c -o prog.o prog.c
+      cc -o prog prog.o -L. -lfoo
+    </literallayout>
+
+    <para>
+
+    On a Windows system,
+    a build of the above example would look like:
+
+    </para>
+
+    <literallayout>
+      C:\><userinput>scons -Q</userinput>
+      cl /nologo /c f1.c /Fof1.obj
+      cl /nologo /c f2.c /Fof2.obj
+      cl /nologo /c f3.c /Fof3.obj
+      lib /nologo /OUT:foo.lib f1.obj f2.obj f3.obj
+      cl /nologo /c prog.c /Foprog.obj
+      link /nologo /OUT:prog.exe /LIBPATH:. foo.lib prog.obj
+    </literallayout>
+
+    <para>
+
+    As usual, notice that &SCons; has taken care
+    of constructing the correct command lines
+    to link with the specified library on each system.
+
+    </para>
+
+  </section>
+
+  <section>
+  <title>Finding Libraries:  the &LIBPATH; Construction Variable</title>
+
+    <para>
+
+    By default, the linker will only look in
+    certain system-defined directories for libraries.
+    &SCons; knows how to look for libraries
+    in directories that you specify with the
+    &LIBPATH; construction variable.
+    &LIBPATH; consists of a list of
+    directory names, like so:
+
+    </para>
+
+    <programlisting>
+      Program('prog.c', LIBS = 'm',
+                        LIBPATH = ['/usr/lib', '/usr/local/lib'])
+    </programlisting>
+
+    <para>
+
+    Using a Python list is preferred because it's portable
+    across systems.  Alternatively, you could put all of
+    the directory names in a single string, separated by the
+    system-specific path separator character:
+    a colon on POSIX systems:
+
+    </para>
+
+    <programlisting>
+      LIBPATH = '/usr/lib:/usr/local/lib'
+    </programlisting>
+
+    <para>
+
+    or a semi-colon on Windows systems:
+
+    </para>
+
+    <programlisting>
+      LIBPATH = 'C:\lib;D:\lib'
+    </programlisting>
+
+    <para>
+
+    When the linker is executed,
+    &SCons; will create appropriate flags
+    so that the linker will look for
+    libraries in the same directories as &SCons;.
+    So on a POSIX or Linux system,
+    a build of the above example would look like:
+
+    </para>
+
+    <literallayout>
+      % <userinput>scons -Q</userinput>
+      cc -c -o prog.o prog.c
+      cc -o prog prog.o -L/usr/lib -L/usr/local/lib -lm
+    </literallayout>
+
+    <para>
+
+    On a Windows system,
+    a build of the above example would look like:
+
+    </para>
+
+    <literallayout>
+      C:\><userinput>scons -Q</userinput>
+      cl /nologo /c prog.c /Foprog.obj
+      link /nologo /OUT:prog.exe /LIBPATH:\usr\lib /LIBPATH:\usr\local\lib m.lib prog.obj
+    </literallayout>
+
+    <para>
+
+    Note again that &SCons; has taken care of
+    the system-specific details of creating
+    the right command-line options.
+
+    </para>
+
+  </section>

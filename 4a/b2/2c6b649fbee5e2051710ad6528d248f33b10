@@ -1,0 +1,11 @@
+#
+# Conscript for installing auxiliary modules, external stuff that
+# we keep checked in so everyone doesn't have to install a bunch
+# of stuff to work on SCons.
+#
+
+Import qw( env test_dir );
+
+@modules = qw(TestCmd.py TestSCons.py unittest.py);
+
+$env->Install("#$test_dir", @modules);

@@ -1,0 +1,305 @@
+Things to do to release a new version of SCons:
+
+	Build and test candidate packages
+
+		test on Linux
+
+		test on Windows NT
+
+			1) tar zxf scons-src-{version}.tar.gz
+			   cd scons-src-{version}
+			   python runtest.py -a
+
+			2) tar zxf scons-{version}.tar.gz
+			   cd scons-{version}
+			   python setup.py install
+			   cd scons-src-{version}
+			   python runtest.py -a -x C:\Python15\scons.bat
+
+			3) scons-{verson}.win32.exe
+			   cd scons-src-{version}
+			   python runtest.py -a -x C:\Python15\scons.bat
+
+	Read through the README and src/README.txt files for any updates
+
+	Prepare src/CHANGES.txt
+
+		date -R the latest release
+
+		should be current if this has been updated as each
+		change went in.
+
+	Prepare src/RELEASE.txt
+
+		date -R the latest release
+
+		Read through to make sure it's okay and edit appropriately.
+
+		Can probably keep most of the existing text
+
+		Add any new known problems
+
+	Prepare debian/changelog
+
+		date -R the latest release
+
+
+
+	END THE BRANCH
+
+		ae_p scons.0
+
+		aede {6}
+
+		aerpass {6}
+
+		aeib {6}
+
+		aeb
+
+		aet
+
+		aet -reg
+
+		aed
+
+		aeipass
+
+	START THE NEW BRANCH
+
+		aenbr -p scons.0 {7}
+
+		aenc -p scons.0.{7}
+
+                        Call it something like, "Initialize the new
+                        branch."  Cause = internal_enhancement.  Exempt
+                        it from all tests (*_exempt = true).
+
+		ae_p scons.0.{7}
+
+		aedb 100
+
+		aecd
+
+		# Change the hard-coded package version numbers
+		# in the following files.
+		aecp README SConstruct debian/changelog rpm/scons.spec
+
+		vi README SConstruct debian/changelog rpm/scons.spec
+
+		# Optionally, do the same in the following:
+		[optional] aecp HOWTO/change.txt
+		[optional] aecp HOWTO/release.txt
+		[optional] aecp debian/scons.postinst
+
+		[optional] vi HOWTO/change.txt
+		[optional] vi HOWTO/release.txt
+		[optional] vi debian/scons.postinst
+
+		aeb
+
+		aet -reg
+
+		aed
+
+		aede
+
+		etc.
+
+
+
+	Read through the FAQ for any updates
+
+
+
+	Upload the packages to the SourceForge incoming FTP:
+
+		ftp upload.sourceforge.net
+		anonymous
+		<your email>
+		cd incoming
+		bin
+		put scons-0.06-1.noarch.rpm
+		put scons-0.06-1.src.rpm
+		put scons-0.06.tar.gz
+		put scons-0.06.win32.exe
+		put scons-0.06.zip
+		put scons-src-0.06.tar.gz
+		put scons-src-0.06.zip
+		put scons_0.06-1_all.deb
+
+	Create the new release at the SourceForge project page:
+
+		Go to the Admin page
+
+		=> Edit/Add File Releases
+
+		=> Add Release
+
+		New release name:  0.06
+
+		Cut-and-paste or upload the RELEASE.txt file.
+
+		Cut-and-paste or upload the CHANGES.txt file.
+
+		(If you cut-and-paste, check the "Preserve my
+		pre-formatted text." box!)
+
+		Check the SCons files you uploaded
+
+		Click "Submit/Refresh"
+
+		Edit the file info:
+
+			scons-0.06-1.noarch.rpm		Any	.rpm
+			scons-0.06-1.src.rpm		Any	Source .rpm
+			scons-0.06.tar.gz		Any	.gz
+			scons-0.06.win32.exe		i386	Other
+			scons-0.06.zip			Any	.zip
+			scons-src-0.06.tar.gz		Any	Source .gz
+			scons-src-0.06.zip   		Any	Source .zip
+			scons_0.06-1_all.deb		Any	.deb
+
+		(This has to be done one at a time.)
+
+	Test downloading from the SourceForge project page
+
+                You'll need to wait a good bit; they update this on, at
+                best, half-hour cycles.
+
+
+
+	Update the web site:
+
+		template:  new version number
+
+		src/index.in:  announcement on the home page
+
+		src/scons-doc.tar.gz:  update
+
+		src/CHANGES.txt:  update
+
+	Test downloading from the web site download page
+
+
+
+	Add news item to the SourceForge project page
+
+
+
+	In the Bugs Tracker, add a Group for the new release (0.06)
+
+
+
+	Announce to the following mailing lists (template below):
+
+		scons-announce@lists.sourceforge.net
+		scons-users@lists.sourceforge.net
+		scons-devel@lists.sourceforge.net
+
+			[right away]
+
+		python-announce@python.org
+
+			[right away, it's moderated and will take
+			some time to get through]
+
+		linux-announce@news.ornl.gov
+
+			[right away, it's moderated and will take
+			some time to get through]
+
+		[optional] cons-discuss@gnu.org
+
+			[only if it's a really big announcement,
+			I said we wouldn't bug this list]
+
+		python-list@python.org
+
+                        [wait until business hours so the announcemnt
+			hits mailboxes while U.S. workers are active]
+
+	Notify www.cmtoday.com/contribute.html
+
+                [This guy wants an announcement no more frequently than
+                once a month, so save it for a future release if it's
+                been too soon since the previous one.]
+
+	Notify freshmeat.net
+
+                [Wait until the morning so the announcement hits the
+                main freshmeat.net page while people in the U.S. are
+                awake and working]
+
+
+
+
+=======================
+
+Template release announcement:
+
+
+
+Version 0.XXX of SCons has been released and is available for download
+from the SCons web site:
+
+        http://www.scons.org/
+
+Or through the download link at the SCons project page at SourceForge:
+
+        http://sourceforge.net/projects/scons/
+
+RPM and Debian packages and a Win32 installer are all available, in
+addition to the traditional .tar.gz and .zip files.
+
+
+WHAT'S NEW IN THIS RELEASE?
+
+Version 0.XXX of SCons contains the following important changes:
+
+  - XXX
+
+For a complete list of changes in version 0.06, see the CHANGES.txt
+file in the release itself.
+
+
+WHAT IS SCONS?
+
+SCons is a software construction tool (build tool, make tool) written
+in Python.  Its design is based on the design which won the Software
+Carpentry build tool competition in August 2000 (in turn derived from
+the Perl-based Cons build tool).
+
+Distinctive features of SCons include:
+
+  - configuration files are Python scripts, allowing the full use of a
+    real scripting language to solve build problems
+  - a modular architecture allows the SCons Build Engine to be
+    embedded in other Python software
+  - a global view of all dependencies; no multiple passes to get
+    everything built
+  - the ability to scan files for implicit dependencies (#include files);
+  - improved parallel build (-j) support
+  - use of MD5 signatures to decide if a file has changed
+  - easily extensible through user-defined Builder and Scanner objects
+  - build actions can be external commands OR internal Python code
+
+An scons-users mailing list has been created for those interested in
+getting started using SCons.  You can subscribe at:
+
+        http://lists.sourceforge.net/lists/listinfo/scons-users
+
+Alternatively, we invite you to subscribe to the low-volume
+scons-announce mailing list to receive notification when new versions of
+SCons become available:
+
+        http://lists.sourceforge.net/lists/listinfo/scons-announce
+
+
+ACKNOWLEDGEMENTS
+
+Special thanks to XXX for his/her/their contributions to this release.
+
+On behalf of the SCons team,
+
+	--SK

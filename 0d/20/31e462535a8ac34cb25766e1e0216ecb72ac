@@ -1,0 +1,183 @@
+# __COPYRIGHT__
+# __FILE__ __REVISION__ __DATE__ __DEVELOPER__
+
+
+                 SCons - a software construction tool
+
+                            Release Notes
+
+
+This is an alpha release of SCons, a tool for building software (and
+other files).  SCons is implemented in Python, and its "configuration
+files" are actually Python scripts, allowing you to use the full power
+of a real scripting language to solve build problems.  You do not,
+however, need to know Python to use SCons effectively.
+
+So that everyone using SCons can help each other learn how to use it
+more effectively, please sign up for the scons-users mailing list at:
+
+    http://lists.sourceforge.net/lists/listinfo/scons-users
+
+
+
+RELEASE 0.14 - XXX
+
+  This is the fourteenth alpha release of SCons.  Please consult the
+  CHANGES.txt file for a list of specific changes since last release.
+
+  Please note the following important changes since release 0.13:
+
+  - Tool specifications no longer take a "platform" argument.
+    XXX
+
+  - Emitter functions in Builders are now passed Node objects, not
+    strings, for all targets and sources.  Your emitter may need to
+    use the str() function to examine the names of specified files.
+
+  - The SetBuildSignatureType() and SetContentSignatureType() functions
+    have been deprecated.  The new names are TargetSignatures() and
+    SourceSignatures().
+
+  - The Export() function and the exported variables argument of
+    SConscript() now search for variables using the same rules as
+    Python: local first, then global.  If you are calling Export() or
+    SConscript() from a module imported directly into an SConscript
+    file, you may need to modify the module to make the previously
+    global variables available to your Export() or SConscript() call.
+
+  Please note the following important changes since release 0.11:
+
+  - The default behavior of SCons is now to change to the directory in
+    which an SConscript file resides while reading the SConscript file.
+    To disable this and restore the previous behavior of staying in the
+    top-level directory, specify the following in your SConstruct file:
+
+        SConscriptChdir(0)
+
+  SCons is developed with an extensive regression test suite, and a
+  rigorous development methodology for continually improving that suite.
+  Because of this, SCons is of sufficient quality that you can use it
+  for real work.  The "alpha" status of the release reflects that we
+  still may change interfaces in future releases, which may require
+  modifications to your SConscript files.  We strive to hold these
+  changes to a minimum.
+
+  Nevertheless, please heed the following disclaimers:
+
+    - There may, of course, be bugs.  Please report any bugs or other
+      problems that you find to our bug tracker at our SourceForge
+      project page:
+
+      http://sourceforge.net/tracker/?func=add&group_id=30337&atid=398971
+
+      We have a reliable bug-fixing methodology already in place and
+      strive to respond to problems relatively quickly.
+
+    - Documentation is spottier than we'd like.  You may need to dive
+      into the source code to figure out how to do something.  Asking
+      questions on the scons-users mailing list is also welcome.  We
+      will be addressing the documentation in upcoming releases, but
+      would be more than glad to have your assistance in correcting this
+      problem... :-)
+
+      In particular, the "SCons Design" documentation on the SCons web
+      site is currently out of date, as we made significant changes to
+      portions of the interface as we figured out what worked and what
+      didn't during implementation.
+
+    - There may be performance issues.  Improving SCons performance
+      is an ongoing priority.  If you still find the performance
+      unacceptable, we would very much like to hear from you and learn
+      more about your configuration so we can optimize the right things.
+
+    - Error messages don't always exist where they'd be helpful.
+      Please let us know about any errors you ran into that would
+      have benefitted from a (more) descriptive message.
+
+  KNOWN PROBLEMS IN THIS RELEASE:
+
+    For a complete list of known problems, consult the SCons bug tracker
+    page at SourceForge:
+
+        http://sourceforge.net/tracker/?atid=398971&group_id=30337&func=browse
+
+    - Support for parallel builds (-j) does not work on WIN32 systems
+      prior to *official* Python release 2.2 (not 2.2 pre-releases).
+
+      Prior to Python 2.2, there is a bug in Python's Win32
+      implementation such that when a thread spawns an external command,
+      it blocks all threads from running.  This breaks the SCons
+      multithreading architecture used to support -j builds.
+
+      We have included a patch file, os_spawnv_fix.diff, that you can
+      use if you you want to fix your version of Python to support
+      parallel builds in SCons.
+
+    - Again, the "SCons Design" documentation on the SCons web
+      site is currently out of date.  Take what you read there with a
+      grain of salt.
+
+    - If a file is specified to be built in multiple ways, the last
+      processed builder specification overwrites all other builders,
+      without any warning.
+
+    - On Win32 systems, you must put a space between the redirection
+      characters < and >, and the specified files (or construction
+      variable expansions):
+
+        command < $SOURCE > $TARGET
+
+      If you don't supply a space (for example, "<$SOURCE"), SCons will
+      not recognize the redirection.
+
+    - People have reported problems with SCons not stopping a build when
+      an interrupt (CTRL+C) is received.  A fix was checked in to 0.11
+      that should fix this behavior on many systems, but there are
+      issues with the underlying Python os.system() call that suggest
+      this fix does not work on all systems or in all circumstances.
+      We're working to try to find a universal solution.
+
+    - Executing the -u or -U option from a source directory that has an
+      associated BuildDir() does not build the targets in the BuildDir().
+
+    - Modifying a construction environment in a subsidiary SConscript
+      file modifies the global environment.
+
+    - PDB files on Win32 in a build that uses BuildDir() are built in
+      the source directory, not the build directory.
+
+    - MSVC .res files are not rebuilt when icons change.
+
+    - The -c option does not clean up .sconsign files or directories
+      created as part of the build.
+
+    - Switching content signatures from "MD5" to "timestamp" and back
+      again can cause unusual errors.  These errors can be cleared up by
+      removing all .sconsign files.
+
+    - On Win32, SCons does not recognize that a target specified as
+      (for example) \some\target is the same as X:\some\target (for your
+      current volume X:).
+
+    - No support yet for the following planned command-line options:
+
+         -d -e -l --list-actions --list-derived --list-where
+         -o --override -p -r -R --random -w --write-filenames
+         -W --warn-undefined-variables
+
+
+
+Thank you for your interest, and please let us know how we can help
+improve SCons for your needs.
+
+Steven Knight
+knight at baldmt dot com
+http://www.baldmt.com/~knight/
+
+With plenty of help from the SCons Development team:
+        Chad Austin
+        Charles Crain
+        Steve Leblanc
+        Anthony Roach
+        Terrel Shumway
+
