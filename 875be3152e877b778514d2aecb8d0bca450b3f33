@@ -1,0 +1,2 @@
+copy: test/packaging/tar/bz2.py
+copyrev: d02344c17a31a20bc5200480fade6295ffa16263

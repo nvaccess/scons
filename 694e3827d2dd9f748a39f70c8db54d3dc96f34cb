@@ -1,0 +1,2 @@
+copy: src/engine/SCons/Tool/MSCommon/vc.py
+copyrev: 4932ff06c8a4f2c128202946d0c6a6461e139143

@@ -1,0 +1,2 @@
+copy: test/Clang/clang++_static_library.py
+copyrev: 289212b306146874206f4ae742f62516aa902e07

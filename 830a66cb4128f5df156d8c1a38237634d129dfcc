@@ -1,0 +1,2 @@
+copy: test/Deprecated/SourceSignatures/switch-rebuild.py
+copyrev: a4710119c1ec463e6550ab8b9d53daccd46b815a

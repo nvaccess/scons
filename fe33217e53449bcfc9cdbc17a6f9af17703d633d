@@ -1,0 +1,2 @@
+copy: src/engine/SCons/Tool/gettext.py
+copyrev: c7ca277c9ebd08590447bf0721b11f645536b2d4

@@ -1,0 +1,2 @@
+copy: test/Libs/bug2909/lib.c
+copyrev: c3e1ca1305baaa35e7d1bb554e52221dd0e55b89

@@ -1,0 +1,2 @@
+copy: src/script/scons-rename-cachedirs.py
+copyrev: 444ebe584e177d10b18ecaab6a59e26bc3ced244

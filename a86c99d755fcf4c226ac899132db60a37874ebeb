@@ -1,0 +1,2 @@
+copy: test/update-release-info.py
+copyrev: cc1226a22b7a47dbce405b0a954b247716fe43e8

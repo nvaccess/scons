@@ -1,0 +1,2 @@
+copy: src/engine/SCons/Tool/clang++.xml
+copyrev: 2fed264e8ebd478f3a2b926f599a3b51d0a0f15b

@@ -1,0 +1,2 @@
+copy: test/Libs/bug2909/SConstruct-libs
+copyrev: 92c7409e4e3bb731d079b6d6a20b7ed3f4ec9641

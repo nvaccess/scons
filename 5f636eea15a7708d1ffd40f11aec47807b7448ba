@@ -1,0 +1,2 @@
+copy: test/D/Issues/2994/D_changed_DFLAGS_not_rebuilding.py
+copyrev: 5c6b052f1006764036332a9d665aea445ac01583

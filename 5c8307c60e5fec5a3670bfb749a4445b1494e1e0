@@ -1,0 +1,2 @@
+copy: test/D/Issues/2994/image/SConstruct
+copyrev: 5cc214f49166b7466487c48f74b031fa3221a21c

@@ -1,0 +1,2 @@
+copy: test/packaging/convenience-functions.py
+copyrev: 307fe0607319b5898db1f4e3c4399c5536581939

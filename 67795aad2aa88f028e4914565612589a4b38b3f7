@@ -1,0 +1,2 @@
+copy: test/scons-time/func/glob.py
+copyrev: b39a3a01e04d3ab1e322e20f491ffb941e98873a
